@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="JAVA_MODULE" version="4">
-  <component name="CheckStyle-IDEA-Module">
-    <option name="configuration">
-      <map />
-    </option>
+  <component name="CheckStyle-IDEA-Module" serialisationVersion="2">
+    <option name="activeLocationsIds" />
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
@@ -29,5 +27,40 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$USER_HOME$/Downloads/2023/2/commons-statistics-1.0-bin/commons-statistics-1.0/commons-statistics-distribution-1.0.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$USER_HOME$/Downloads/2023/2/commons-statistics-1.0-bin/commons-statistics-1.0/commons-statistics-distribution-1.0-javadoc.jar!/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$USER_HOME$/Downloads/2023/2/commons-statistics-1.0-bin/commons-statistics-1.0/commons-statistics-distribution-1.0-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="commons-statistics-distribution-1.0-javadoc" level="project" />
+    <orderEntry type="library" name="commons-statistics-distribution-1.0-javadoc" level="application" />
+    <orderEntry type="library" name="commons-statistics-distribution-1.0" level="project" />
+    <orderEntry type="library" name="commons-statistics-distribution-1.0-javadoc (2)" level="project" />
+    <orderEntry type="library" name="commons-statistics-distribution-1.0-javadoc (3)" level="project" />
+    <orderEntry type="library" name="commons-statistics-distribution-1.0-sources" level="project" />
+    <orderEntry type="library" name="commons-statistics-distribution-1.0-sources (2)" level="project" />
+    <orderEntry type="library" name="commons-statistics-distribution-1.0-javadoc (4)" level="project" />
+    <orderEntry type="library" name="lanterna-3.0.3" level="project" />
+    <orderEntry type="library" name="commons-math4-core-4.0-beta1" level="project" />
+    <orderEntry type="library" name="commons-math4-core-4.0-beta1-javadoc" level="project" />
+    <orderEntry type="library" name="commons-math4-core-4.0-beta1-sources" level="project" />
+    <orderEntry type="library" name="commons-math4-legacy-4.0-beta1" level="project" />
+    <orderEntry type="library" name="commons-math4-legacy-4.0-beta1-javadoc" level="project" />
+    <orderEntry type="library" name="commons-statistics-distribution-1.0-javadoc (5)" level="project" />
+    <orderEntry type="library" name="commons-statistics-distribution-1.0-sources (3)" level="project" />
+    <orderEntry type="library" name="commons-statistics-distribution-1.0-sources (4)" level="project" />
+    <orderEntry type="library" name="commons-statistics-distribution-1.0-javadoc (6)" level="project" />
+    <orderEntry type="library" name="commons-statistics-distribution-1.0-sources (5)" level="project" />
+    <orderEntry type="library" name="commons-statistics-distribution-1.0-javadoc (7)" level="project" />
+    <orderEntry type="library" name="commons-statistics-distribution-1.0-javadoc (8)" level="project" />
+    <orderEntry type="library" name="commons-statistics-distribution-1.0-sources (6)" level="project" />
   </component>
 </module>
