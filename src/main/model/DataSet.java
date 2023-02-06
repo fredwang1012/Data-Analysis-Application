@@ -6,7 +6,7 @@ import static java.lang.Math.*;
 
 
 // Represents a data list having a name, list length, and associated statistics
-public class DataList {
+public class DataSet {
     private String listName;               // number list's name
     private int listLength;                // length of number list
     private double listMean;               // number list mean
@@ -20,7 +20,7 @@ public class DataList {
      * EFFECTS: name on list is set to listName; all associated statistics
      *          set to 0; make new number list
      */
-    public DataList(String name) {
+    public DataSet(String name) {
         listName = name;
         listLength = 0;
         listMean = 0;
@@ -56,6 +56,16 @@ public class DataList {
 
     public void addNum(double number) {
         numList.add(number);
+    }
+
+    public boolean removeNum(double number) {
+        for (int i = listLength; i > 0; i--) {
+            if (numList.get(i) == number) {
+                numList.remove(i);
+                return true;
+            }
+        }
+        return false;
     }
 
     public double calcOneSampleZStat(double nullMean, double popSD) {
