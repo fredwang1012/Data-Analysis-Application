@@ -56,16 +56,54 @@ public class DataSet {
 
     public void addNum(double number) {
         numList.add(number);
+        listLength++;
     }
 
     public boolean removeNum(double number) {
         for (int i = listLength; i > 0; i--) {
             if (numList.get(i) == number) {
                 numList.remove(i);
+                listLength--;
                 return true;
             }
         }
         return false;
+    }
+
+    public void calcMean() {
+        double sum = 0;
+        if (listLength == 0) {
+            listMean = 0;
+        } else {
+            for (double value : numList) {
+                sum += value;
+            }
+            listMean = sum / listLength;
+        }
+    }
+
+    public void calcMedian() {
+        ArrayList<Double> tempList = (ArrayList) numList.clone();
+        Collections.sort(tempList);
+        if (listLength % 2 == 0) {
+            listMedian = (tempList.get(listLength / 2) + tempList.get(listLength / 2 + 1)) / 2;
+        } else {
+            listMedian = tempList.get(listLength / 2 + 1);
+        }
+    }
+
+    public void calcVariance() {
+        double sum = 0;
+        calcMean();
+        for (double value : numList) {
+            sum += Math.pow(value - listMean, 2);
+        }
+        listVar = sum / listLength;
+    }
+
+    public void calcSD() {
+        calcVariance();
+        listSD = sqrt(listVar);
     }
 
     public double calcOneSampleZStat(double nullMean, double popSD) {
