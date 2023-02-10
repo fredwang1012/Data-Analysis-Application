@@ -166,6 +166,10 @@ public class DataSet {
         return z;
     }
 
+    public ArrayList<Double> getList() {
+        return numList;
+    }
+
     public void sortList() {
         Collections.sort(numList);
     }

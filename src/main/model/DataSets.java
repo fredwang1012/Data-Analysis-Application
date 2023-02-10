@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import model.DataSet;
 
 public class DataSets {
     private static ArrayList<DataSet> listOfDatasets;
@@ -12,14 +13,15 @@ public class DataSets {
     }
 
     public void addList(String listName) {
-        DataSet tempList = new DataSet(listName);
-        listOfDatasets.add(tempList);
+        listOfDatasets.add(new DataSet(listName));
+        listLength++;
     }
 
     public boolean removeList(String listName) {
         for (int i = listLength; i > 0; i--) {
             if (listOfDatasets.get(i).getListName() == listName) {
                 listOfDatasets.remove(i);
+                listLength--;
                 return true;
             }
         }
@@ -28,6 +30,19 @@ public class DataSets {
 
     public void clearAll() {
         listOfDatasets.clear();
+        listLength = 0;
+    }
+
+    public ArrayList<DataSet> getDataSet() {
+        return listOfDatasets;
+    }
+
+    public int getListLength() {
+        return listLength;
+    }
+
+    public DataSet getData(int index) {
+        return listOfDatasets.get(index);
     }
 
 }
