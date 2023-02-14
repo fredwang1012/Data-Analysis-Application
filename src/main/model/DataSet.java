@@ -60,7 +60,7 @@ public class DataSet {
     }
 
     public boolean removeNum(double number) {
-        for (int i = listLength; i > 0; i--) {
+        for (int i = 0; i < listLength; i++) {
             if (numList.get(i) == number) {
                 numList.remove(i);
                 listLength--;
@@ -85,14 +85,20 @@ public class DataSet {
     public void calcMedian() {
         ArrayList<Double> tempList = (ArrayList) numList.clone();
         Collections.sort(tempList);
-        if (listLength % 2 == 0) {
-            listMedian = (tempList.get(listLength / 2) + tempList.get(listLength / 2 + 1)) / 2;
+        if (listLength == 0) {
+            listMedian = 0;
+        } else if (listLength % 2 == 0) {
+            listMedian = (tempList.get(listLength / 2) + tempList.get(listLength / 2 - 1)) / 2;
         } else {
-            listMedian = tempList.get(listLength / 2 + 1);
+            listMedian = tempList.get(listLength / 2);
         }
     }
 
     public void calcVariance() {
+        if (listLength == 0) {
+            listVar = 0;
+            return;
+        }
         double sum = 0;
         calcMean();
         for (double value : numList) {

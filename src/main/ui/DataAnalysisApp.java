@@ -8,6 +8,7 @@ import java.util.*;
 public class DataAnalysisApp {
     private DataSets dataSets;
     private Scanner input;
+    private Scanner innerInput;
     private boolean backToMainMenu = false;
 
     public DataAnalysisApp() {
@@ -37,7 +38,7 @@ public class DataAnalysisApp {
     }
 
     private void processOrder(String order) {
-        if (order.equals("pooled list") || order.equals("Pooled List")) {
+        if (order.toLowerCase().equals("pooled list")) {
             pooledUI();
         } else if (isInList(order)) {
             for (DataSet data : dataSets.getDataSet()) {
@@ -55,6 +56,8 @@ public class DataAnalysisApp {
     }
 
     private void pooledUI() {
+        String userInput;
+        updateStats(dataSets.getData(0));
         System.out.println("Pooled Data:");
         System.out.println("-------------");
         for (double num : dataSets.getData(0).getList()) {
@@ -64,25 +67,92 @@ public class DataAnalysisApp {
         System.out.println("Median: " + dataSets.getData(0).getListMedian());
         System.out.println("Variance: " + dataSets.getData(0).getListVar());
         System.out.println("Standard Deviation: " + dataSets.getData(0).getListSD());
+        System.out.println();
+        System.out.println("Enter a command");
+        System.out.println("\tb -> Back");
+        userInput = innerInput.next();
+        if (userInput.toLowerCase().equals("b")) {
+            return;
+        } else {
+            System.out.println("Invalid input!");
+            pooledUI();
+        }
     }
 
     private void listUI(DataSet data) {
-        int addedNumber = 0;
+        String userInput;
         System.out.println(data.getListName() + ":");
         System.out.println("-------------");
         for (double num : data.getList()) {
             System.out.println(num);
         }
-        addNum(data, addedNumber);
         System.out.println("Mean: " + data.getListMean());
         System.out.println("Median: " + data.getListMedian());
         System.out.println("Variance: " + data.getListVar());
         System.out.println("Standard Deviation: " + data.getListSD());
+        System.out.println("Enter a command");
+        System.out.println("\tan -> Add Number");
+        System.out.println("\trn -> Remove Number");
+        System.out.println("\tb -> Back");
+        userInput = innerInput.next();
+        listInputProcessor(data, userInput);
     }
 
-    private void addNum(DataSet data, int num) {
-        data.addNum(num);
-        updateStats(data);
+    private void listInputProcessor(DataSet data, String userInput) {
+        if (userInput.equals("an")) {
+            addNum(data);
+        } else if (userInput.equals("rn")) {
+            removeNum(data);
+        } else if (userInput.equals("b")) {
+            return;
+        } else {
+            System.out.println("Invalid input");
+            listUI(data);
+        }
+    }
+
+    private void removeNum(DataSet data) {
+        double number = 0;
+        boolean numRemoved;
+        String numberInput;
+        System.out.println();
+        System.out.println("Enter number:");
+        numberInput = input.next();
+        try {
+            number = Double.parseDouble(numberInput);
+            numRemoved = data.removeNum(number);
+            if (numRemoved) {
+                dataSets.getData(0).addNum(number);
+                updateStats(data);
+                listUI(data);
+            } else {
+                System.out.println("Number not in list, please try again!");
+                removeNum(data);
+            }
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid Input!");
+            System.err.println("Please try again:");
+            removeNum(data);
+        }
+    }
+
+    private void addNum(DataSet data) {
+        double number = 0;
+        String numberInput;
+        System.out.println();
+        System.out.println("Enter number:");
+        numberInput = input.next();
+        try {
+            number = Double.parseDouble(numberInput);
+            data.addNum(number);
+            dataSets.getData(0).addNum(number);
+            updateStats(data);
+            listUI(data);
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid Input!");
+            System.err.println("Please try again:");
+            addNum(data);
+        }
     }
 
     private void updateStats(DataSet data) {
@@ -103,7 +173,6 @@ public class DataAnalysisApp {
 
     private void makeNewList(String listName) {
         dataSets.addList(listName);
-        showMainMenu();
     }
 
     private void initialize() {
@@ -111,6 +180,8 @@ public class DataAnalysisApp {
         dataSets.addList("Pooled List");
         input = new Scanner(System.in);
         input.useDelimiter("\n");
+        innerInput = new Scanner(System.in);
+        innerInput.useDelimiter("\n");
     }
 
     private void showMainMenu() {
