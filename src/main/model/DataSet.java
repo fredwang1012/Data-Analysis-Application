@@ -5,7 +5,7 @@ import java.util.*;
 import static java.lang.Math.*;
 
 
-// Represents a data list having a name, list length, and associated statistics
+// Represents a dataset having a name, list length, and associated statistics
 public class DataSet {
     private String listName;               // number list's name
     private int listLength;                // length of number list
@@ -16,7 +16,6 @@ public class DataSet {
     private ArrayList<Double> numList;     // number list
 
     /*
-     * REQUIRES: name has a non-zero length
      * EFFECTS: name on list is set to listName; all associated statistics
      *          set to 0; make new number list
      */
@@ -30,35 +29,45 @@ public class DataSet {
         numList = new ArrayList<>();
     }
 
+    // EFFECTS: returns list name
     public String getListName() {
         return listName;
     }
 
+    // EFFECTS: returns list length
     public int getListLength() {
         return listLength;
     }
 
+    // EFFECTS: returns list mean
     public double getListMean() {
         return listMean;
     }
 
+    // EFFECTS: returns list median
     public double getListMedian() {
         return listMedian;
     }
 
+    // EFFECTS: returns list standard deviation
     public double getListSD() {
         return listSD;
     }
 
+    // EFFECTS: returns list variance
     public double getListVar() {
         return listVar;
     }
 
+    // MODIFIES: this
+    // EFFECTS: adds a number to dataset
     public void addNum(double number) {
         numList.add(number);
         listLength++;
     }
 
+    // MODIFIES: this
+    // EFFECTS: removes number from dataset
     public boolean removeNum(double number) {
         for (int i = 0; i < listLength; i++) {
             if (numList.get(i) == number) {
@@ -70,6 +79,8 @@ public class DataSet {
         return false;
     }
 
+    // MODIFIES: this
+    // EFFECTS: calculates and updates dataset mean
     public void calcMean() {
         double sum = 0;
         if (listLength == 0) {
@@ -82,6 +93,8 @@ public class DataSet {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: calculates and updates dataset median
     public void calcMedian() {
         ArrayList<Double> tempList = (ArrayList) numList.clone();
         Collections.sort(tempList);
@@ -94,6 +107,8 @@ public class DataSet {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: calculates and updates dataset variance
     public void calcVariance() {
         if (listLength == 0) {
             listVar = 0;
@@ -107,12 +122,14 @@ public class DataSet {
         listVar = sum / listLength;
     }
 
+    // MODIFIES: this
+    // EFFECTS: calculates and updates dataset standard deviation
     public void calcSD() {
         calcVariance();
         listSD = sqrt(listVar);
     }
 
-    public double calcOneSampleZStat(double nullMean, double popSD) {
+/*    public double calcOneSampleZStat(double nullMean, double popSD) {
         return (listMean - nullMean) / (popSD / sqrt(listLength));
     }
 
@@ -170,7 +187,7 @@ public class DataSet {
             z = 0;
         }
         return z;
-    }
+    }*/
 
     public ArrayList<Double> getList() {
         return numList;
