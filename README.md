@@ -10,6 +10,8 @@ calculate a wide variety of summary statistics such as:
 - standard deviation
 - variance
 
+Further, with the datasets stored in the program, the program can also produce confidence intervals.
+
 This program is designed to be a tool for *anyone* who is trying to do any simple data analysis. But this will mostly 
 be used by students or other people who are studying or are in the field of statistics. This project is of great 
 interest to me because this program if developed well could be a very convenient tool for anyone who is trying to 
@@ -29,6 +31,7 @@ into the functionality of the program, developing, this into the **ultimate** to
 - As a user, I want to be able to find the median of a dataset
 - As a user, I want to be able to find the standard deviation of a dataset
 - As a user, I want to be able to find the variance of a dataset
+- As a user, I want to be able to create confidence intervals with a dataset
 - As a user, I want to be able to remove individual entries in a dataset
 - As a user, I want to be able to automatically sort datasets from small to large 
 

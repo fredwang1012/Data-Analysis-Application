@@ -153,21 +153,29 @@ public class DataSet {
 
         return "[" + lowerBound + ", " + upperBound + "]";
     }
+*/
 
-    public String calcConfInterval(double confLevel) {
-        double z;
+    // MODIFIES: this
+    // EFFECTS: calculates and updates dataset standard deviation and mean and calculates the confidence interval
+    //          with given z score
+    public String calcConfInterval(double z) {
         double lowerBound;
         double upperBound;
 
-        z = getZ(confLevel);
+        if (listLength == 0) {
+            return "[0, 0]";
+        }
 
-        lowerBound = listMean - (z * listSD / sqrt(listLength));
-        upperBound = listMean + (z * listSD / sqrt(listLength));
+        calcSD();
+        calcMean();
+        lowerBound = listMean - (z * listSD / sqrt(Double.valueOf(listLength)));
+        upperBound = listMean + (z * listSD / sqrt(Double.valueOf(listLength)));
 
         return "[" + lowerBound + ", " + upperBound + "]";
     }
 
-    private static double getZ(double confLevel) {
+    // EFFECTS: returns the estimated z score with given confidence level
+    public static double getZ(double confLevel) {
         double z;
         if (confLevel == 0.997) {
             z = 3;
@@ -181,18 +189,21 @@ public class DataSet {
             z = 1.282;
         } else if (confLevel == 0.75) {
             z = 1.15;
-        } else if (confLevel == 0.68) {
-            z = 1.15;
+        } else if (confLevel == 0.5) {
+            z = 0.68;
         } else {
             z = 0;
         }
         return z;
-    }*/
+    }
 
+    // EFFECTS: returns this dataset number list
     public ArrayList<Double> getList() {
         return numList;
     }
 
+    // MODIFIES: this
+    // EFFECTS: sorts the dataset number list from small to large
     public void sortList() {
         Collections.sort(numList);
     }

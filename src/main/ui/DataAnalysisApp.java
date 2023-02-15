@@ -3,6 +3,7 @@ package ui;
 import model.DataSet;
 import model.DataBase;
 
+import javax.xml.crypto.Data;
 import java.util.*;
 
 // Data analysis application
@@ -77,18 +78,29 @@ public class DataAnalysisApp {
         for (double num : dataBase.getData(0).getList()) {
             System.out.println(num);
         }
-        System.out.println("\nMean: " + dataBase.getData(0).getListMean());
+        System.out.println("\nLength: " + dataBase.getData(0).getListLength());
+        System.out.println("Mean: " + dataBase.getData(0).getListMean());
         System.out.println("Median: " + dataBase.getData(0).getListMedian());
         System.out.println("Variance: " + dataBase.getData(0).getListVar());
         System.out.println("Standard Deviation: " + dataBase.getData(0).getListSD());
         System.out.println("\nEnter a command:");
         System.out.println("\t\"sl\" -> Sort List");
+        System.out.println("\t\"ci\" -> Calculate Confidence Interval (Please check for CLT assumptions!)");
         System.out.println("\t\"b\" -> Back");
         userInput = innerInput.next();
+        pooledListInputProcessor(userInput);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: handles the input for pooled dataset
+    private void pooledListInputProcessor(String userInput) {
         if (userInput.toLowerCase().equals("b")) {
             return;
         } else if (userInput.toLowerCase().equals("sl")) {
             dataBase.getData(0).sortList();
+            pooledUI();
+        } else if (userInput.toLowerCase().equals("ci")) {
+            calcCI(dataBase.getData(0));
             pooledUI();
         } else {
             System.err.println("Invalid input!");
@@ -100,12 +112,13 @@ public class DataAnalysisApp {
     // EFFECTS: outputs UI for normal dataset and allows for user input
     private void listUI(DataSet data) {
         String userInput;
-        System.out.println(data.getListName());
+        System.out.println("\n" + data.getListName());
         System.out.println("-------------");
         for (double num : data.getList()) {
             System.out.println(num);
         }
-        System.out.println("\nMean: " + data.getListMean());
+        System.out.println("\nLength: " + data.getListLength());
+        System.out.println("Mean: " + data.getListMean());
         System.out.println("Median: " + data.getListMedian());
         System.out.println("Variance: " + data.getListVar());
         System.out.println("Standard Deviation: " + data.getListSD());
@@ -113,13 +126,41 @@ public class DataAnalysisApp {
         System.out.println("\t\"an\" -> Add Number");
         System.out.println("\t\"rn\" -> Remove Number");
         System.out.println("\t\"sl\" -> Sort List");
+        System.out.println("\t\"ci\" -> Calculate Confidence Interval (Please check for CLT assumptions!)");
         System.out.println("\t\"b\" -> Back");
         userInput = innerInput.next();
         listInputProcessor(data, userInput);
     }
 
+    // EFFECTS: calculates the confidence interval for dataset and outputs
+    private void calcCI(DataSet data) {
+        String input;
+        double cl;
+        double z;
+        System.out.println("Please enter confidence level: \n\t\"99.7\" -> 99.7%");
+        System.out.println("\t\"99\" -> 99%\n\t\"95\" -> 95%");
+        System.out.println("\t\"90\" -> 90%");
+        System.out.println("\t\"80\" -> 80%");
+        System.out.println("\t\"75\" -> 75%");
+        System.out.println("\t\"50\" -> 50%");
+        input = innerInput.next();
+        try {
+            cl = Double.parseDouble(input) / 100;
+            z = data.getZ(cl);
+            if (z == 0) {
+                System.err.println("Not a valid confidence level!\nPlease try again:");
+                calcCI(data);
+            } else {
+                System.out.println("Confidence Interval:\n" + data.calcConfInterval(z));
+            }
+        } catch (NumberFormatException e) {
+            System.err.println("Not a number!\nPlease try again:");
+            calcCI(data);
+        }
+    }
+
     // MODIFIES: this
-    // EFFECTS: handles input for list UI
+    // EFFECTS: handles input for list UI for given dataset
     private void listInputProcessor(DataSet data, String userInput) {
         if (userInput.equals("an")) {
             addNum(data);
@@ -129,6 +170,9 @@ public class DataAnalysisApp {
             return;
         } else if (userInput.toLowerCase().equals("sl")) {
             data.sortList();
+            listUI(data);
+        } else if (userInput.toLowerCase().equals("ci")) {
+            calcCI(data);
             listUI(data);
         } else {
             System.err.println("Invalid input");
@@ -206,6 +250,12 @@ public class DataAnalysisApp {
     // MODIFIES: this
     // EFFECTS: makes a new dataset with given name
     private void makeNewList(String listName) {
+        boolean listExists;
+        listExists = isInList(listName);
+        if (listExists) {
+            System.out.println("A list already has that name!");
+            return;
+        }
         dataBase.addList(listName);
     }
 
