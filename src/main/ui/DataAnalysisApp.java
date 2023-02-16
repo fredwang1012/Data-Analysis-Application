@@ -204,7 +204,7 @@ public class DataAnalysisApp {
                 updateStats(data);
                 listUI(data);
             } else {
-                System.out.println("Number not in list, please try again!");
+                System.err.println("Number not in list, please try again!");
                 removeNum(data);
             }
         } catch (NumberFormatException e) {
@@ -260,7 +260,7 @@ public class DataAnalysisApp {
         boolean listExists;
         listExists = isInList(listName);
         if (listExists) {
-            System.out.println("A list already has that name!");
+            System.err.println("A list already has that name!");
             return;
         }
         dataBase.addList(listName);
@@ -273,7 +273,7 @@ public class DataAnalysisApp {
         ArrayList<Double> numToRemove;
         listExists = isInList(listName);
         if (listName.equalsIgnoreCase("pooled list")) {
-            System.out.println("You cannot delete the pooled list!");
+            System.err.println("You cannot delete the pooled list!");
             return;
         }
         numToRemove = dataBase.removeList(listName);
