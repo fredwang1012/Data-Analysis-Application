@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-// test class for DataSet model class
+// Test class for DataSet model class
 class DataSetTests {
     private DataSet testDataSet;
 

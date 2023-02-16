@@ -8,11 +8,11 @@ import static java.lang.Math.*;
 // Represents a dataset having a name, list length, and associated statistics
 public class DataSet {
     private final String listName;               // number list's name
-    private double listLength;                // length of number list
-    private double listMean;               // number list mean
-    private double listMedian;             // number list median
-    private double listSD;                 // number list standard deviation
-    private double listVar;                // number list variance
+    private double listLength;                   // length of number list
+    private double listMean;                     // number list mean
+    private double listMedian;                   // number list median
+    private double listSD;                       // number list standard deviation
+    private double listVar;                      // number list variance
     private final ArrayList<Double> numList;     // number list
 
     /*

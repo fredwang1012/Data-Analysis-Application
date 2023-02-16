@@ -7,9 +7,9 @@ import java.util.*;
 
 // Data analysis application
 public class DataAnalysisApp {
-    private DataBase dataBase;
-    private Scanner input;
-    private Scanner innerInput;
+    private DataBase dataBase;      // database used to store datasets for application
+    private Scanner input;          // scanner used for processing main menu inputs
+    private Scanner innerInput;     // scanner used for processing dataset UI inputs
 
     // EFFECTS: runs the data analysis application
     public DataAnalysisApp() {

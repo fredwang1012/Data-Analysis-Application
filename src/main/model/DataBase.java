@@ -2,7 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
-// represents a database with multiple datasets stored in an ArrayList and list length
+// Represents a database with multiple datasets stored in an ArrayList and list length
 public class DataBase {
     private static ArrayList<DataSet> listOfDatasets;  // dataset list
     private static int listLength;                     // length of database
