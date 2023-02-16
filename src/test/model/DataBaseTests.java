@@ -31,10 +31,13 @@ class DataBaseTests {
     public void testRemoveList() {
         test.addList("test 1");
         test.addList("test 2");
-        assertFalse(test.removeList(""));
-        assertTrue(test.removeList("test 1"));
+        test.getData(0).addNum(5);
+        test.getData(1).addNum(10);
+        test.getData(1).addNum(20);
+        assertEquals(0, test.removeList("").size());
+        assertEquals(1, test.removeList("test 1").size());
         assertEquals(1, test.getListLength());
-        assertTrue(test.removeList("test 2"));
+        assertEquals(2, test.removeList("test 2").size());
         assertEquals(0, test.getListLength());
     }
 
@@ -46,5 +49,11 @@ class DataBaseTests {
         assertEquals(0, test.getListLength());
     }
 
+    @Test
+    public void testGetDataBase() {
+        assertEquals(0, test.getDataBase().size());
+        test.addList("test 1");
+        assertEquals(1, test.getDataBase().size());
+    }
 
 }

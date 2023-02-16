@@ -3,7 +3,6 @@ package ui;
 import model.DataSet;
 import model.DataBase;
 
-import javax.xml.crypto.Data;
 import java.util.*;
 
 // Data analysis application
@@ -11,7 +10,6 @@ public class DataAnalysisApp {
     private DataBase dataBase;
     private Scanner input;
     private Scanner innerInput;
-    private boolean backToMainMenu = false;
 
     // EFFECTS: runs the data analysis application
     public DataAnalysisApp() {
@@ -19,7 +17,7 @@ public class DataAnalysisApp {
     }
 
     // MODIFIES: this
-    // EFFECTS: processes user input
+    // EFFECTS: keeps the app running
     private void runApp() {
         boolean run = true;
         String order;
@@ -38,14 +36,13 @@ public class DataAnalysisApp {
             }
         }
 
-        System.out.println("Thanks for your patronage!");
-
+        System.out.println("Thanks for using!");
     }
 
     // MODIFIES: this
-    // EFFECTS: processes user input
+    // EFFECTS: processes user input in main menu
     private void processOrder(String order) {
-        if (order.toLowerCase().equals("pooled list")) {
+        if (order.equalsIgnoreCase("pooled list")) {
             pooledUI();
         } else if (isInList(order)) {
             for (DataSet data : dataBase.getDataBase()) {
@@ -94,17 +91,21 @@ public class DataAnalysisApp {
     // MODIFIES: this
     // EFFECTS: handles the input for pooled dataset
     private void pooledListInputProcessor(String userInput) {
-        if (userInput.toLowerCase().equals("b")) {
-            return;
-        } else if (userInput.toLowerCase().equals("sl")) {
-            dataBase.getData(0).sortList();
-            pooledUI();
-        } else if (userInput.toLowerCase().equals("ci")) {
-            calcCI(dataBase.getData(0));
-            pooledUI();
-        } else {
-            System.err.println("Invalid input!");
-            pooledUI();
+        switch (userInput.toLowerCase()) {
+            case "b":
+                return;
+            case "sl":
+                dataBase.getData(0).sortList();
+                pooledUI();
+                break;
+            case "ci":
+                calcCI(dataBase.getData(0));
+                pooledUI();
+                break;
+            default:
+                System.err.println("Invalid input!");
+                pooledUI();
+                break;
         }
     }
 
@@ -132,7 +133,7 @@ public class DataAnalysisApp {
         listInputProcessor(data, userInput);
     }
 
-    // EFFECTS: calculates the confidence interval for dataset and outputs
+    // EFFECTS: calculates the confidence interval for dataset and outputs the confidence interval
     private void calcCI(DataSet data) {
         String input;
         double cl;
@@ -146,7 +147,7 @@ public class DataAnalysisApp {
         input = innerInput.next();
         try {
             cl = Double.parseDouble(input) / 100;
-            z = data.getZ(cl);
+            z = DataSet.getZ(cl);
             if (z == 0) {
                 System.err.println("Not a valid confidence level!\nPlease try again:");
                 calcCI(data);
@@ -162,28 +163,34 @@ public class DataAnalysisApp {
     // MODIFIES: this
     // EFFECTS: handles input for list UI for given dataset
     private void listInputProcessor(DataSet data, String userInput) {
-        if (userInput.equals("an")) {
-            addNum(data);
-        } else if (userInput.equals("rn")) {
-            removeNum(data);
-        } else if (userInput.equals("b")) {
-            return;
-        } else if (userInput.toLowerCase().equals("sl")) {
-            data.sortList();
-            listUI(data);
-        } else if (userInput.toLowerCase().equals("ci")) {
-            calcCI(data);
-            listUI(data);
-        } else {
-            System.err.println("Invalid input");
-            listUI(data);
+        switch (userInput) {
+            case "an":
+                addNum(data);
+                break;
+            case "rn":
+                removeNum(data);
+                break;
+            case "b":
+                return;
+            case "sl":
+                data.sortList();
+                listUI(data);
+                break;
+            case "ci":
+                calcCI(data);
+                listUI(data);
+                break;
+            default:
+                System.err.println("Invalid input");
+                listUI(data);
+                break;
         }
     }
 
     // MODIFIES: this
-    // EFFECTS: removes existing number in passed in dataset
+    // EFFECTS: removes existing number from passed in dataset
     private void removeNum(DataSet data) {
-        double number = 0;
+        double number;
         boolean numRemoved;
         String numberInput;
         System.out.println();
@@ -210,7 +217,7 @@ public class DataAnalysisApp {
     // MODIFIES: this
     // EFFECTS: add number to passed in dataset
     private void addNum(DataSet data) {
-        double number = 0;
+        double number;
         String numberInput;
         System.out.println();
         System.out.println("Enter number:");
@@ -263,19 +270,23 @@ public class DataAnalysisApp {
     // EFFECTS: removes existing dataset with the passed in name
     private void removeExistingList(String listName) {
         boolean listExists;
+        ArrayList<Double> numToRemove;
         listExists = isInList(listName);
-        if (listName.toLowerCase().equals("pooled list")) {
+        if (listName.equalsIgnoreCase("pooled list")) {
             System.out.println("You cannot delete the pooled list!");
             return;
         }
-        dataBase.removeList(listName);
+        numToRemove = dataBase.removeList(listName);
+        for (double num : numToRemove) {
+            dataBase.getData(0).removeNum(num);
+        }
         if (!listExists) {
-            System.out.println("List does not exist");
+            System.err.println("List does not exist");
         }
     }
 
     // MODIFIES: this
-    // EFFECTS: initializes datasets
+    // EFFECTS: initializes datasets and Scanners
     private void initialize() {
         dataBase = new DataBase();
         dataBase.addList("Pooled List");

@@ -7,13 +7,13 @@ import static java.lang.Math.*;
 
 // Represents a dataset having a name, list length, and associated statistics
 public class DataSet {
-    private String listName;               // number list's name
-    private int listLength;                // length of number list
+    private final String listName;               // number list's name
+    private double listLength;                // length of number list
     private double listMean;               // number list mean
     private double listMedian;             // number list median
     private double listSD;                 // number list standard deviation
     private double listVar;                // number list variance
-    private ArrayList<Double> numList;     // number list
+    private final ArrayList<Double> numList;     // number list
 
     /*
      * EFFECTS: name on list is set to listName; all associated statistics
@@ -35,7 +35,7 @@ public class DataSet {
     }
 
     // EFFECTS: returns list length
-    public int getListLength() {
+    public double getListLength() {
         return listLength;
     }
 
@@ -101,9 +101,9 @@ public class DataSet {
         if (listLength == 0) {
             listMedian = 0;
         } else if (listLength % 2 == 0) {
-            listMedian = (tempList.get(listLength / 2) + tempList.get(listLength / 2 - 1)) / 2;
+            listMedian = (tempList.get((int) (listLength / 2)) + tempList.get((int) (listLength / 2 - 1))) / 2;
         } else {
-            listMedian = tempList.get(listLength / 2);
+            listMedian = tempList.get((int) (listLength / 2));
         }
     }
 
@@ -168,8 +168,8 @@ public class DataSet {
 
         calcSD();
         calcMean();
-        lowerBound = listMean - (z * listSD / sqrt(Double.valueOf(listLength)));
-        upperBound = listMean + (z * listSD / sqrt(Double.valueOf(listLength)));
+        lowerBound = listMean - (z * listSD / sqrt(listLength));
+        upperBound = listMean + (z * listSD / sqrt(listLength));
 
         return "[" + lowerBound + ", " + upperBound + "]";
     }

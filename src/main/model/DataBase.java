@@ -21,21 +21,18 @@ public class DataBase {
     }
 
     // MODIFIES: this
-    // EFFECTS: removes a dataset with given String name from the database
-    public boolean removeList(String listName) {
-        DataSet tempData;
+    // EFFECTS: removes a dataset with given String name from the database and returns numbers from removed list
+    public ArrayList<Double> removeList(String listName) {
+        ArrayList<Double> tempData = new ArrayList<>();
         for (int i = 0; i < listLength; i++) {
             if (listOfDatasets.get(i).getListName().equals(listName)) {
-                tempData = listOfDatasets.get(i);
-                for (double num : tempData.getList()) {
-                    listOfDatasets.get(0).removeNum(num);
-                }
+                tempData = listOfDatasets.get(i).getList();
                 listOfDatasets.remove(i);
                 listLength--;
-                return true;
+                return tempData;
             }
         }
-        return false;
+        return tempData;
     }
 
     // MODIFIES: this
