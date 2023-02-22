@@ -62,5 +62,6 @@
     <orderEntry type="library" name="commons-statistics-distribution-1.0-javadoc (7)" level="project" />
     <orderEntry type="library" name="commons-statistics-distribution-1.0-javadoc (8)" level="project" />
     <orderEntry type="library" name="commons-statistics-distribution-1.0-sources (6)" level="project" />
+    <orderEntry type="library" name="json-20210307" level="project" />
   </component>
 </module>

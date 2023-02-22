@@ -16,6 +16,10 @@ public class DataAnalysisApp {
         runApp();
     }
 
+
+    /*
+    Basic app model based on Teller application example
+     */
     // MODIFIES: this
     // EFFECTS: keeps the app running
     private void runApp() {
@@ -39,7 +43,7 @@ public class DataAnalysisApp {
         System.out.println("Thanks for using!");
     }
 
-    // MODIFIES: this
+    // MODIFIES: this, dataBase
     // EFFECTS: processes user input in main menu
     private void processOrder(String order) {
         if (order.equalsIgnoreCase("pooled list")) {
@@ -66,7 +70,7 @@ public class DataAnalysisApp {
         }
     }
 
-    // MODIFIES: this
+    // MODIFIES: this, dataBase
     // EFFECTS: outputs UI for pooled dataset and allows for user input
     private void pooledUI() {
         String userInput;
@@ -88,7 +92,7 @@ public class DataAnalysisApp {
         pooledListInputProcessor(userInput);
     }
 
-    // MODIFIES: this
+    // MODIFIES: this, dataBase
     // EFFECTS: handles the input for pooled dataset
     private void pooledListInputProcessor(String userInput) {
         switch (userInput.toLowerCase()) {
@@ -109,7 +113,7 @@ public class DataAnalysisApp {
         }
     }
 
-    // MODIFIES: this
+    // MODIFIES: this, data
     // EFFECTS: outputs UI for normal dataset and allows for user input
     private void listUI(DataSet data) {
         String userInput;
@@ -160,7 +164,7 @@ public class DataAnalysisApp {
         }
     }
 
-    // MODIFIES: this
+    // MODIFIES: this, data
     // EFFECTS: handles input for list UI for given dataset
     private void listInputProcessor(DataSet data, String userInput) {
         switch (userInput) {
@@ -187,7 +191,7 @@ public class DataAnalysisApp {
         }
     }
 
-    // MODIFIES: this
+    // MODIFIES: this, data
     // EFFECTS: removes existing number from passed in dataset
     private void removeNum(DataSet data) {
         double number;
@@ -214,7 +218,7 @@ public class DataAnalysisApp {
         }
     }
 
-    // MODIFIES: this
+    // MODIFIES: this, data
     // EFFECTS: add number to passed in dataset
     private void addNum(DataSet data) {
         double number;
@@ -235,7 +239,7 @@ public class DataAnalysisApp {
         }
     }
 
-    // MODIFIES: this
+    // MODIFIES: this, data
     // EFFECTS: update statistics of passed in dataset
     private void updateStats(DataSet data) {
         data.calcMean();
@@ -254,7 +258,7 @@ public class DataAnalysisApp {
         return false;
     }
 
-    // MODIFIES: this
+    // MODIFIES: this, dataBase
     // EFFECTS: makes a new dataset with given name
     private void makeNewList(String listName) {
         boolean listExists;
@@ -266,7 +270,7 @@ public class DataAnalysisApp {
         dataBase.addList(listName);
     }
 
-    // MODIFIES: this
+    // MODIFIES: this, dataBase
     // EFFECTS: removes existing dataset with the passed in name
     private void removeExistingList(String listName) {
         boolean listExists;
@@ -285,7 +289,7 @@ public class DataAnalysisApp {
         }
     }
 
-    // MODIFIES: this
+    // MODIFIES: this, dataBase
     // EFFECTS: initializes datasets and Scanners
     private void initialize() {
         dataBase = new DataBase();
