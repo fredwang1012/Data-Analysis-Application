@@ -2,17 +2,24 @@ package ui;
 
 import model.DataSet;
 import model.DataBase;
+import persistence.*;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.*;
 
 // Data analysis application
 public class DataAnalysisApp {
+    private static final String JSON_STORE = "./data/database.json";
     private DataBase dataBase;      // database used to store datasets for application
     private Scanner input;          // scanner used for processing main menu inputs
     private Scanner innerInput;     // scanner used for processing dataset UI inputs
+    private JsonWriter jsonWriter;  // writer used for writing Json file
+    private JsonReader jsonReader;  // reader used for reading Json file
+
 
     // EFFECTS: runs the data analysis application
-    public DataAnalysisApp() {
+    public DataAnalysisApp() throws FileNotFoundException {
         runApp();
     }
 
@@ -54,19 +61,57 @@ public class DataAnalysisApp {
                     listUI(data);
                 }
             }
-        } else if (order.equals("nl")) {
-            System.out.println("Please give your list a name:");
-            order = input.next();
-            makeNewList(order);
-        } else if (order.equals("rl")) {
-            System.out.println("Please enter the name of list:");
-            order = input.next();
-            removeExistingList(order);
-        } else if (order.equals("ca")) {
-            dataBase.clearAll();
-            initialize();
         } else {
-            System.err.println("Invalid input!");
+            processOrderInputHandler(order);
+        }
+    }
+
+    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
+    private void processOrderInputHandler(String order) {
+        switch (order) {
+            case "nl":
+                System.out.println("Please give your list a name:");
+                order = input.next();
+                makeNewList(order);
+                break;
+            case "rl":
+                System.out.println("Please enter the name of list:");
+                order = input.next();
+                removeExistingList(order);
+                break;
+            case "ca":
+                dataBase.clearAll();
+                initialize();
+                break;
+            case "s":
+                saveDataBase();
+                break;
+            case "l":
+                loadDataBase();
+                break;
+            default:
+                System.err.println("Invalid input!");
+                break;
+        }
+    }
+
+    private void saveDataBase() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(dataBase);
+            jsonWriter.close();
+            System.out.println("Saved database to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
+        }
+    }
+
+    private void loadDataBase() {
+        try {
+            dataBase = jsonReader.read();
+            System.out.println("Loaded database.");
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
         }
     }
 
@@ -246,6 +291,11 @@ public class DataAnalysisApp {
         data.calcMedian();
         data.calcVariance();
         data.calcSD();
+        dataBase.getData(0).calcMean();
+        dataBase.getData(0).calcMedian();
+        dataBase.getData(0).calcSD();
+        dataBase.getData(0).calcVariance();
+
     }
 
     // EFFECTS: returns true if program contains a dataset with given String name, false otherwise
@@ -292,12 +342,14 @@ public class DataAnalysisApp {
     // MODIFIES: this, dataBase
     // EFFECTS: initializes datasets and Scanners
     private void initialize() {
-        dataBase = new DataBase();
+        dataBase = new DataBase("DataBase");
         dataBase.addList("Pooled List");
         input = new Scanner(System.in);
         input.useDelimiter("\n");
         innerInput = new Scanner(System.in);
         innerInput.useDelimiter("\n");
+        jsonReader = new JsonReader(JSON_STORE);
+        jsonWriter = new JsonWriter(JSON_STORE);
     }
 
     // EFFECTS: shows main UI menu
@@ -310,6 +362,8 @@ public class DataAnalysisApp {
         System.out.println("\n\"nl\" -> New List");
         System.out.println("\"rl \" -> Remove List");
         System.out.println("\"ca\" -> Clear All");
+        System.out.println("\"s\" -> Save");
+        System.out.println("\"l\" -> Load");
         System.out.println("\"q\" -> Quit");
     }
 

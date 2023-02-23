@@ -1,0 +1,30 @@
+{
+    "listOfDatasets": [
+        {
+            "listVar": 4.3647454038658664E13,
+            "listMean": 6606623.216061561,
+            "listMedian": 6606623.216061561,
+            "listSD": 6606621.983938438,
+            "listName": "Pooled List",
+            "numList": [
+                1.232123123121,
+                1.32132452E7
+            ],
+            "listLength": 2
+        },
+        {
+            "listVar": 4.3647454038658664E13,
+            "listMean": 6606623.216061561,
+            "listMedian": 6606623.216061561,
+            "listSD": 6606621.983938438,
+            "listName": "asdf",
+            "numList": [
+                1.232123123121,
+                1.32132452E7
+            ],
+            "listLength": 2
+        }
+    ],
+    "name": "DataBase",
+    "listLength": 2
+}

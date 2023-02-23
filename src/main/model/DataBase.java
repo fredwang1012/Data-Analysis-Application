@@ -1,16 +1,22 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.ArrayList;
 
 // Represents a database with multiple datasets stored in an ArrayList and list length
-public class DataBase {
+public class DataBase implements Writable {
     private static ArrayList<DataSet> listOfDatasets;  // dataset list
     private static int listLength;                     // length of database
+    private static String name;
 
     // EFFECTS: constructs a new database with length set to 0
-    public DataBase() {
+    public DataBase(String name) {
         listOfDatasets = new ArrayList<>();
         listLength = 0;
+        this.name = name;
     }
 
     // MODIFIES: this
@@ -57,4 +63,21 @@ public class DataBase {
         return listOfDatasets.get(index);
     }
 
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("listLength", listLength);
+        json.put("listOfDatasets", dataSetsToJson());
+        return json;
+    }
+
+    private JSONArray dataSetsToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (DataSet dataSet : listOfDatasets) {
+            jsonArray.put(dataSet.toJson());
+        }
+        return jsonArray;
+    }
 }

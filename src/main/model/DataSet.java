@@ -1,19 +1,22 @@
 package model;
 
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.*;
 
 import static java.lang.Math.*;
 
 
 // Represents a dataset having a name, list length, and associated statistics
-public class DataSet {
+public class DataSet implements Writable {
     private final String listName;               // number list's name
     private double listLength;                   // length of number list
     private double listMean;                     // number list mean
     private double listMedian;                   // number list median
     private double listSD;                       // number list standard deviation
     private double listVar;                      // number list variance
-    private final ArrayList<Double> numList;     // number list
+    private ArrayList<Double> numList;     // number list
 
     /*
      * EFFECTS: name on list is set to listName; all associated statistics
@@ -57,6 +60,30 @@ public class DataSet {
     // EFFECTS: returns list variance
     public double getListVar() {
         return listVar;
+    }
+
+    public void setListLength(int listLength) {
+        this.listLength = listLength;
+    }
+
+    public void setListMean(double listMean) {
+        this.listMean = listMean;
+    }
+
+    public void setListMedian(double listMedian) {
+        this.listMedian = listMedian;
+    }
+
+    public void setListSD(double listSD) {
+        this.listSD = listSD;
+    }
+
+    public void setListVar(double listVar) {
+        this.listVar = listVar;
+    }
+
+    public void setNumList(ArrayList<Double> numList) {
+        this.numList = numList;
     }
 
     // MODIFIES: this
@@ -208,4 +235,16 @@ public class DataSet {
         Collections.sort(numList);
     }
 
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("listName", listName);
+        json.put("listLength", listLength);
+        json.put("listMean", listMean);
+        json.put("listMedian", listMedian);
+        json.put("listSD", listSD);
+        json.put("listVar", listVar);
+        json.put("numList", numList);
+        return json;
+    }
 }

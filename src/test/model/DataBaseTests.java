@@ -11,7 +11,7 @@ class DataBaseTests {
 
     @BeforeEach
     public void setUp() {
-        testDataBase = new DataBase();
+        testDataBase = new DataBase("DataBase");
     }
 
     @Test
