@@ -16,7 +16,7 @@ public class DataBase implements Writable {
     public DataBase(String name) {
         listOfDatasets = new ArrayList<>();
         listLength = 0;
-        this.name = name;
+        DataBase.name = name;
     }
 
     // MODIFIES: this

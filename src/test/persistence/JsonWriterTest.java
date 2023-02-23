@@ -3,9 +3,6 @@ package persistence;
 import model.DataBase;
 import model.DataSet;
 import org.junit.jupiter.api.Test;
-
-import javax.xml.crypto.Data;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -67,7 +64,7 @@ public class JsonWriterTest extends JsonTest{
             writer.close();
 
             JsonReader reader = new JsonReader("./data/testWriterGeneralDataBase.json");
-            dataBase = reader.read();;
+            dataBase = reader.read();
             assertEquals("DataBase", dataBase.getName());
             ArrayList<DataSet> dataSets = dataBase.getDataSets();
             assertEquals(2, dataSets.size());
