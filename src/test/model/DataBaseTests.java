@@ -53,9 +53,9 @@ class DataBaseTests {
 
     @Test
     public void testGetDataBase() {
-        assertEquals(0, testDataBase.getDataBase().size());
+        assertEquals(0, testDataBase.getDataSets().size());
         testDataBase.addList("test 1");
-        assertEquals(1, testDataBase.getDataBase().size());
+        assertEquals(1, testDataBase.getDataSets().size());
     }
 
 }

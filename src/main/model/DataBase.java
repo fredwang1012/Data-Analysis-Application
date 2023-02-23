@@ -48,8 +48,12 @@ public class DataBase implements Writable {
         listLength = 0;
     }
 
+    public String getName() {
+        return name;
+    }
+
     // EFFECTS: returns this database
-    public ArrayList<DataSet> getDataBase() {
+    public ArrayList<DataSet> getDataSets() {
         return listOfDatasets;
     }
 

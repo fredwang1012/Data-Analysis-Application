@@ -1,0 +1,30 @@
+{
+    "listOfDatasets": [
+        {
+            "listVar": 1.2100000000000013,
+            "listMean": 11.3,
+            "listMedian": 11.3,
+            "listSD": 1.1000000000000005,
+            "listName": "List1",
+            "numList": [
+                10.2,
+                12.4
+            ],
+            "listLength": 2
+        },
+        {
+            "listVar": 0,
+            "listMean": 10,
+            "listMedian": 10,
+            "listSD": 0,
+            "listName": "List2",
+            "numList": [
+                10,
+                10
+            ],
+            "listLength": 2
+        }
+    ],
+    "name": "DataBase",
+    "listLength": 2
+}

@@ -56,8 +56,8 @@ public class DataAnalysisApp {
         if (order.equalsIgnoreCase("pooled list")) {
             pooledUI();
         } else if (isInList(order)) {
-            for (DataSet data : dataBase.getDataBase()) {
-                if (data.getListName().equals(order)) {
+            for (DataSet data : dataBase.getDataSets()) {
+                if (order.equalsIgnoreCase(data.getListName())) {
                     listUI(data);
                 }
             }
@@ -300,8 +300,8 @@ public class DataAnalysisApp {
 
     // EFFECTS: returns true if program contains a dataset with given String name, false otherwise
     private boolean isInList(String order) {
-        for (DataSet data : dataBase.getDataBase()) {
-            if (data.getListName().equals(order)) {
+        for (DataSet data : dataBase.getDataSets()) {
+            if (data.getListName().equalsIgnoreCase(order)) {
                 return true;
             }
         }
@@ -356,7 +356,7 @@ public class DataAnalysisApp {
     private void showMainMenu() {
         System.out.println("\nPlease select from following: ");
         System.out.println("\nLists: ");
-        for (DataSet data : dataBase.getDataBase()) {
+        for (DataSet data : dataBase.getDataSets()) {
             System.out.println("\t\"" + data.getListName() + "\"");
         }
         System.out.println("\n\"nl\" -> New List");

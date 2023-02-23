@@ -1,0 +1,44 @@
+{
+    "listOfDatasets": [
+        {
+            "listVar": 468.75,
+            "listMean": 87.5,
+            "listMedian": 100,
+            "listSD": 21.650635094610966,
+            "listName": "Pooled List",
+            "numList": [
+                100,
+                100,
+                50,
+                100
+            ],
+            "listLength": 4
+        },
+        {
+            "listVar": 0,
+            "listMean": 100,
+            "listMedian": 100,
+            "listSD": 0,
+            "listName": "List1",
+            "numList": [
+                100,
+                100
+            ],
+            "listLength": 2
+        },
+        {
+            "listVar": 625,
+            "listMean": 75,
+            "listMedian": 75,
+            "listSD": 25,
+            "listName": "List2",
+            "numList": [
+                50,
+                100
+            ],
+            "listLength": 2
+        }
+    ],
+    "name": "DataBase",
+    "listLength": 3
+}
