@@ -1,13 +1,46 @@
 {
-    "listOfDatasets": [{
-        "listVar": 0,
-        "listMean": 0,
-        "listMedian": 0,
-        "listSD": 0,
-        "listName": "Pooled List",
-        "numList": [],
-        "listLength": 0
-    }],
+    "listOfDatasets": [
+        {
+            "listVar": 986.1858025600001,
+            "listMean": 44.080799999999996,
+            "listMedian": 43.5,
+            "listSD": 31.403595376325942,
+            "listName": "Pooled List",
+            "numList": [
+                5.67,
+                45.234,
+                100,
+                26,
+                43.5
+            ],
+            "listLength": 5
+        },
+        {
+            "listVar": 1495.863750222222,
+            "listMean": 50.30133333333333,
+            "listMedian": 45.234,
+            "listSD": 38.67639784445059,
+            "listName": "list 1",
+            "numList": [
+                5.67,
+                45.234,
+                100
+            ],
+            "listLength": 3
+        },
+        {
+            "listVar": 76.5625,
+            "listMean": 34.75,
+            "listMedian": 34.75,
+            "listSD": 8.75,
+            "listName": "list 2",
+            "numList": [
+                26,
+                43.5
+            ],
+            "listLength": 2
+        }
+    ],
     "name": "DataBase",
-    "listLength": 1
+    "listLength": 3
 }

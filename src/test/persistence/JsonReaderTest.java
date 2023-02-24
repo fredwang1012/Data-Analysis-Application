@@ -3,12 +3,11 @@ package persistence;
 import model.DataBase;
 import model.DataSet;
 import org.junit.jupiter.api.*;
-
 import java.io.IOException;
 import java.util.ArrayList;
-
 import static org.junit.jupiter.api.Assertions.*;
 
+// test class for JSON reader based on JSON reader test class from JSON serialization demo
 public class JsonReaderTest extends JsonTest{
 
     @Test

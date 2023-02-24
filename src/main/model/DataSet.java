@@ -2,9 +2,7 @@ package model;
 
 import org.json.JSONObject;
 import persistence.Writable;
-
 import java.util.*;
-
 import static java.lang.Math.*;
 
 
@@ -16,12 +14,11 @@ public class DataSet implements Writable {
     private double listMedian;                   // number list median
     private double listSD;                       // number list standard deviation
     private double listVar;                      // number list variance
-    private ArrayList<Double> numList;     // number list
+    private ArrayList<Double> numList;           // number list
 
-    /*
-     * EFFECTS: name on list is set to listName; all associated statistics
-     *          set to 0; make new number list
-     */
+
+    // EFFECTS: name on list is set to listName; all associated statistics
+    //          set to 0; make new number list
     public DataSet(String name) {
         listName = name;
         listLength = 0;
@@ -62,26 +59,38 @@ public class DataSet implements Writable {
         return listVar;
     }
 
+    // MODIFIES: this
+    // EFFECTS: sets listLength to value of passed in list length
     public void setListLength(int listLength) {
         this.listLength = listLength;
     }
 
+    // MODIFIES: this
+    // EFFECTS: sets listMean to value of passed in list mean
     public void setListMean(double listMean) {
         this.listMean = listMean;
     }
 
+    // MODIFIES: this
+    // EFFECTS: sets listMedian to value of passed in list median
     public void setListMedian(double listMedian) {
         this.listMedian = listMedian;
     }
 
+    // MODIFIES: this
+    // EFFECTS: sets listSD to value of passed in list standard deviation
     public void setListSD(double listSD) {
         this.listSD = listSD;
     }
 
+    // MODIFIES: this
+    // EFFECTS: sets listVar to value of passed in list variance
     public void setListVar(double listVar) {
         this.listVar = listVar;
     }
 
+    // MODIFIES: this
+    // EFFECTS: sets numList to passed in number list
     public void setNumList(ArrayList<Double> numList) {
         this.numList = numList;
     }
@@ -235,6 +244,7 @@ public class DataSet implements Writable {
         Collections.sort(numList);
     }
 
+    // EFFECTS: converts this dataset into a JSONObject and returns the object
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();

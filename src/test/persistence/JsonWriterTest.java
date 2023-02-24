@@ -5,10 +5,10 @@ import model.DataSet;
 import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.util.ArrayList;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+// test class for JSON writer based on JSON writer test class from JSON serialization demo
 public class JsonWriterTest extends JsonTest{
     @Test
     void testWriterInvalidFile() {

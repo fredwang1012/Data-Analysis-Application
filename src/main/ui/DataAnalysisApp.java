@@ -66,17 +66,16 @@ public class DataAnalysisApp {
         }
     }
 
-    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
+    // MODIFIES: this
+    // EFFECTS: handles the user input for the main menu
     private void processOrderInputHandler(String order) {
         switch (order) {
             case "nl":
-                System.out.println("Please give your list a name:");
-                order = input.next();
+                order = getInput("Please give your list a name:");
                 makeNewList(order);
                 break;
             case "rl":
-                System.out.println("Please enter the name of list:");
-                order = input.next();
+                order = getInput("Please enter the name of list:");
                 removeExistingList(order);
                 break;
             case "ca":
@@ -95,6 +94,15 @@ public class DataAnalysisApp {
         }
     }
 
+    // EFFECTS: gets the user input for processOrderInputHandler and returns string
+    private String getInput(String userInput) {
+        String order;
+        System.out.println(userInput);
+        order = input.next();
+        return order;
+    }
+
+    // EFFECTS: saves database to file
     private void saveDataBase() {
         try {
             jsonWriter.open();
@@ -106,6 +114,8 @@ public class DataAnalysisApp {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: loads database from file
     private void loadDataBase() {
         try {
             dataBase = jsonReader.read();

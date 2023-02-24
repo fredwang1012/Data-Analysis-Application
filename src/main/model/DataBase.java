@@ -3,7 +3,6 @@ package model;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
-
 import java.util.ArrayList;
 
 // Represents a database with multiple datasets stored in an ArrayList and list length
@@ -48,6 +47,7 @@ public class DataBase implements Writable {
         listLength = 0;
     }
 
+    // EFFECTS: returns database name
     public String getName() {
         return name;
     }
@@ -67,6 +67,7 @@ public class DataBase implements Writable {
         return listOfDatasets.get(index);
     }
 
+    // EFFECTS: returns JSONObject version of database
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
@@ -76,6 +77,7 @@ public class DataBase implements Writable {
         return json;
     }
 
+    // EFFECTS: returns JSONArray version of the dataset list in database
     private JSONArray dataSetsToJson() {
         JSONArray jsonArray = new JSONArray();
 
