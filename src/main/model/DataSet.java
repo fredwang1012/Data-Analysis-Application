@@ -233,15 +233,15 @@ public class DataSet implements Writable {
         return z;
     }
 
-    // EFFECTS: returns this dataset number list
-    public ArrayList<Double> getList() {
-        return numList;
-    }
-
     // MODIFIES: this
     // EFFECTS: sorts the dataset number list from small to large
     public void sortList() {
         Collections.sort(numList);
+    }
+
+    // EFFECTS: returns this dataset number list
+    public ArrayList<Double> getList() {
+        return numList;
     }
 
     // EFFECTS: converts this dataset into a JSONObject and returns the object
