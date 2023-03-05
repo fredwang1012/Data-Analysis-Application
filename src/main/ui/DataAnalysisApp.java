@@ -2,6 +2,7 @@ package ui;
 
 import model.DataSet;
 import model.DataBase;
+
 import persistence.*;
 
 import java.io.FileNotFoundException;
@@ -13,7 +14,6 @@ public class DataAnalysisApp {
     private static final String JSON_STORE = "./data/database.json";
     private DataBase dataBase;      // database used to store datasets for application
     private Scanner input;          // scanner used for processing main menu inputs
-    private Scanner innerInput;     // scanner used for processing dataset UI inputs
     private JsonWriter jsonWriter;  // writer used for writing Json file
     private JsonReader jsonReader;  // reader used for reading Json file
 
@@ -44,19 +44,36 @@ public class DataAnalysisApp {
                 processOrder(order);
             }
         }
-
+        saveReminder();
         System.out.println("Thanks for using!");
+    }
+
+    // EFFECTS: reminds user to save database and allows for saving
+    private void saveReminder() {
+        String order;
+        while (true) {
+            System.out.println("Do you want to save your database? \"y\"/\"n\"");
+            order = input.next();
+            order = order.toLowerCase();
+            if (order.equals("y")) {
+                saveDataBase();
+                break;
+            } else if (order.equals("n")) {
+                break;
+            }
+            System.err.println("Invalid input!");
+        }
     }
 
     // MODIFIES: this, dataBase
     // EFFECTS: processes user input in main menu
     private void processOrder(String order) {
         if (order.equalsIgnoreCase("pooled list")) {
-            pooledUI();
+            listUI(null, true);
         } else if (isInList(order)) {
             for (DataSet data : dataBase.getDataSets()) {
                 if (order.equalsIgnoreCase(data.getListName())) {
-                    listUI(data);
+                    listUI(data, false);
                 }
             }
         } else {
@@ -112,7 +129,7 @@ public class DataAnalysisApp {
         }
     }
 
-    // MODIFIES: this
+    // MODIFIES: this, dataBase
     // EFFECTS: loads database from file
     private void loadDataBase() {
         try {
@@ -123,127 +140,98 @@ public class DataAnalysisApp {
         }
     }
 
-    // MODIFIES: this, dataBase
-    // EFFECTS: outputs UI for pooled dataset and allows for user input
-    private void pooledUI() {
+    // MODIFIES: this, data
+    // EFFECTS: outputs list UI and allows for user input
+    private void listUI(DataSet data, boolean isPool) {
         String userInput;
-        System.out.println("\nPooled Data\n-------------");
-        for (double num : dataBase.getPooledList()) {
-            System.out.println(num);
-        }
-        dataBase.calcMean();
-        dataBase.calcMedian();
-        dataBase.calcSD();
-        dataBase.calcVariance();
-        System.out.println("\nLength: " + dataBase.getPooledListLength());
-        System.out.println("Mean: " + dataBase.getListMean());
-        System.out.println("Median: " + dataBase.getListMedian());
-        System.out.println("Variance: " + dataBase.getListVar());
-        System.out.println("Standard Deviation: " + dataBase.getListSD());
-        System.out.println("\nEnter a command:");
-        System.out.println("\t\"sl\" -> Sort List");
-        System.out.println("\t\"ci\" -> Calculate Confidence Interval (Please check for CLT assumptions!)");
-        System.out.println("\t\"b\" -> Back");
-        userInput = innerInput.next();
-        pooledListInputProcessor(userInput);
-    }
-
-    // MODIFIES: this, dataBase
-    // EFFECTS: handles the input for pooled dataset
-    private void pooledListInputProcessor(String userInput) {
-        switch (userInput.toLowerCase()) {
-            case "b":
-                return;
-            case "sl":
-                dataBase.sortList();
-                pooledUI();
-                break;
-            case "ci":
-                calcCI();
-                pooledUI();
-                break;
-            default:
-                System.err.println("Invalid input!");
-                pooledUI();
-                break;
+        listUIOutput(data, isPool);
+        userInput = input.next();
+        if (isPool) {
+            listInputProcessor(userInput);
+        } else {
+            listInputProcessor(data, userInput);
         }
     }
 
     // MODIFIES: this, data
-    // EFFECTS: outputs UI for normal dataset and allows for user input
-    private void listUI(DataSet data) {
-        String userInput;
-        System.out.println("\n" + data.getListName());
+    // EFFECTS: helper for printing out list UI
+    private void listUIOutput(DataSet data, boolean isPool) {
+        if (isPool) {
+            updateStats();
+        } else {
+            updateStats(data);
+        }
+        System.out.println("\n" + (isPool ? "Pooled List" : data.getListName()));
         System.out.println("-------------");
-        for (double num : data.getList()) {
+        for (double num : (isPool ? dataBase.getPooledList() : data.getList())) {
             System.out.println(num);
         }
-        System.out.println("\nLength: " + data.getListLength());
-        System.out.println("Mean: " + data.getListMean());
-        System.out.println("Median: " + data.getListMedian());
-        System.out.println("Variance: " + data.getListVar());
-        System.out.println("Standard Deviation: " + data.getListSD());
+        System.out.println("\nLength: " + (isPool ? dataBase.getPooledListLength() : data.getListLength()));
+        System.out.println("Mean: " + (isPool ? dataBase.getListMean() : data.getListMean()));
+        System.out.println("Median: " + (isPool ? dataBase.getListMedian() : data.getListMedian()));
+        System.out.println("Variance: " + (isPool ? dataBase.getListVar() : data.getListVar()));
+        System.out.println("Standard Deviation: " + (isPool ? dataBase.getListSD() : data.getListSD()));
         System.out.println("Enter a command");
-        System.out.println("\t\"an\" -> Add Number");
-        System.out.println("\t\"rn\" -> Remove Number");
+        if (!isPool) {
+            System.out.println("\t\"an\" -> Add Number");
+            System.out.println("\t\"rn\" -> Remove Number");
+        }
         System.out.println("\t\"sl\" -> Sort List");
         System.out.println("\t\"ci\" -> Calculate Confidence Interval (Please check for CLT assumptions!)");
         System.out.println("\t\"b\" -> Back");
-        userInput = innerInput.next();
-        listInputProcessor(data, userInput);
-    }
-
-    // EFFECTS: calculates the confidence interval for pooled list and outputs the confidence interval
-    private void calcCI() {
-        String input;
-        double cl;
-        double z;
-        System.out.println("Please enter confidence level: \n\t\"99.7\" -> 99.7%");
-        System.out.println("\t\"99\" -> 99%\n\t\"95\" -> 95%");
-        System.out.println("\t\"90\" -> 90%");
-        System.out.println("\t\"80\" -> 80%");
-        System.out.println("\t\"75\" -> 75%");
-        System.out.println("\t\"50\" -> 50%");
-        input = innerInput.next();
-        try {
-            cl = Double.parseDouble(input) / 100;
-            z = DataSet.getZ(cl);
-            if (z == 0) {
-                System.err.println("Not a valid confidence level!\nPlease try again:");
-                calcCI();
-            } else {
-                System.out.println("Confidence Interval:\n" + dataBase.calcConfInterval(z));
-            }
-        } catch (NumberFormatException e) {
-            System.err.println("Not a number!\nPlease try again:");
-            calcCI();
-        }
     }
 
     // EFFECTS: calculates the confidence interval for dataset and outputs the confidence interval
     private void calcCI(DataSet data) {
-        String input;
+        String inputText;
         double cl;
         double z;
-        System.out.println("Please enter confidence level: \n\t\"99.7\" -> 99.7%");
-        System.out.println("\t\"99\" -> 99%\n\t\"95\" -> 95%");
-        System.out.println("\t\"90\" -> 90%");
-        System.out.println("\t\"80\" -> 80%");
-        System.out.println("\t\"75\" -> 75%");
-        System.out.println("\t\"50\" -> 50%");
-        input = innerInput.next();
+        confIntOutput();
+        inputText = input.next();
         try {
-            cl = Double.parseDouble(input) / 100;
+            cl = Double.parseDouble(inputText) / 100;
             z = DataSet.getZ(cl);
             if (z == 0) {
                 System.err.println("Not a valid confidence level!\nPlease try again:");
                 calcCI(data);
             } else {
-                System.out.println("Confidence Interval:\n" + data.calcConfInterval(z));
+                System.out.println("Confidence Interval:\n" + ((data == null) ? dataBase.calcConfInterval(z) :
+                        data.calcConfInterval(z)));
             }
         } catch (NumberFormatException e) {
             System.err.println("Not a number!\nPlease try again:");
             calcCI(data);
+        }
+    }
+
+    // EFFECTS: helper for outputting confidence interval texts
+    private static void confIntOutput() {
+        System.out.println("Please enter confidence level: \n\t\"99.7\" -> 99.7%");
+        System.out.println("\t\"99\" -> 99%\n\t\"95\" -> 95%");
+        System.out.println("\t\"90\" -> 90%");
+        System.out.println("\t\"80\" -> 80%");
+        System.out.println("\t\"75\" -> 75%");
+        System.out.println("\t\"50\" -> 50%");
+    }
+
+    // MODIFIES: this
+    // EFFECTS: handles input for list UI for pooled list
+    private void listInputProcessor(String userInput) {
+        switch (userInput) {
+            case "b":
+                return;
+            case "sl":
+                dataBase.sortList();
+                listUI(null, true);
+                break;
+            case "ci":
+                calcCI(null);
+                listUI(null, true);
+                break;
+            default:
+                System.err.println("Invalid input");
+                listUI(null, true);
+                break;
         }
     }
 
@@ -261,15 +249,15 @@ public class DataAnalysisApp {
                 return;
             case "sl":
                 data.sortList();
-                listUI(data);
+                listUI(data, false);
                 break;
             case "ci":
                 calcCI(data);
-                listUI(data);
+                listUI(data, false);
                 break;
             default:
                 System.err.println("Invalid input");
-                listUI(data);
+                listUI(data, false);
                 break;
         }
     }
@@ -289,7 +277,7 @@ public class DataAnalysisApp {
             if (numRemoved) {
                 dataBase.removeNumFromPool(number);
                 updateStats(data);
-                listUI(data);
+                listUI(data, false);
             } else {
                 System.err.println("Number not in list, please try again!");
                 removeNum(data);
@@ -314,7 +302,7 @@ public class DataAnalysisApp {
             data.addNum(number);
             dataBase.addNumToPool(number);
             updateStats(data);
-            listUI(data);
+            listUI(data, false);
         } catch (NumberFormatException e) {
             System.err.println("Not a number!");
             System.err.println("Please try again:");
@@ -329,11 +317,15 @@ public class DataAnalysisApp {
         data.calcMedian();
         data.calcVariance();
         data.calcSD();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: update statistics of pooled list
+    private void updateStats() {
         dataBase.calcMean();
         dataBase.calcMedian();
         dataBase.calcSD();
         dataBase.calcVariance();
-
     }
 
     // EFFECTS: returns true if program contains a dataset with given String name, false otherwise
@@ -365,14 +357,14 @@ public class DataAnalysisApp {
     // EFFECTS: removes existing dataset with the passed in name
     private void removeExistingList(String listName) {
         boolean listExists;
-        ArrayList<Double> numToRemove;
+        ArrayList<Double> numbsToRemove;
         listExists = isInList(listName);
         if (listName.equalsIgnoreCase("pooled list")) {
             System.err.println("You cannot delete the pooled list!");
             return;
         }
-        numToRemove = dataBase.removeList(listName);
-        for (double num : numToRemove) {
+        numbsToRemove = dataBase.removeList(listName);
+        for (double num : numbsToRemove) {
             dataBase.removeNumFromPool(num);
         }
         if (!listExists) {
@@ -386,8 +378,6 @@ public class DataAnalysisApp {
         dataBase = new DataBase("Database");
         input = new Scanner(System.in);
         input.useDelimiter("\n");
-        innerInput = new Scanner(System.in);
-        innerInput.useDelimiter("\n");
         jsonReader = new JsonReader(JSON_STORE);
         jsonWriter = new JsonWriter(JSON_STORE);
     }

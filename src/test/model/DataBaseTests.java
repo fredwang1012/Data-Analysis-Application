@@ -180,6 +180,4 @@ class DataBaseTests {
         testDataBase.sortList();
         assertEquals(pooledList, testDataBase.getPooledList());
     }
-
-
 }

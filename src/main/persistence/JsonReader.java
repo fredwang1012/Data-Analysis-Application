@@ -2,8 +2,10 @@ package persistence;
 
 import model.DataBase;
 import model.DataSet;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -50,10 +52,10 @@ public class JsonReader {
         dataBase.setListMean(jsonObject.getDouble("listMean"));
         dataBase.setListMedian(jsonObject.getDouble("listMedian"));
         dataBase.setPooledList(makePooledList(jsonObject.getJSONArray("pooledList")));
-
         return dataBase;
     }
 
+    // EFFECTS: reconstructs pooled number list from JSONArray object and returns the list
     private ArrayList<Double> makePooledList(JSONArray pooledList) {
         ArrayList<Double> numList = new ArrayList<>();
         for (Object number : pooledList) {

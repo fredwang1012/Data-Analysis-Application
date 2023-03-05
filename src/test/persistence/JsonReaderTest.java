@@ -2,10 +2,12 @@ package persistence;
 
 import model.DataBase;
 import model.DataSet;
+
 import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.IOException;
 import java.util.ArrayList;
-import static org.junit.jupiter.api.Assertions.*;
 
 // test class for JSON reader based on JSON reader test class from JSON serialization demo
 public class JsonReaderTest extends JsonTest{
@@ -26,8 +28,6 @@ public class JsonReaderTest extends JsonTest{
         JsonReader reader = new JsonReader("./data/testReaderEmptyDataBase.json");
         try {
             DataBase dataBase = reader.read();
-            ArrayList<DataSet> dataSets = dataBase.getDataSets();
-            ArrayList<Double> numList = dataBase.getPooledList();
             ArrayList<Double> pooledList = new ArrayList<>();
             checkDataBase("Database", 0, 0, 0, 0, 0, 0,
                     pooledList, dataBase);

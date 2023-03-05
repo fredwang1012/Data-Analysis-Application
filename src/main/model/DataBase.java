@@ -2,32 +2,37 @@ package model;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import persistence.Writable;
 
 import java.util.ArrayList;
 import java.util.Collections;
-
 import static java.lang.Math.sqrt;
 
 // Represents a database with multiple datasets stored in an ArrayList and list length
 public class DataBase implements Writable {
-    private static ArrayList<DataSet> listOfDatasets;  // dataset list
+    private static String name;                        // name of database
     private static int listLength;                     // length of database
     private static int pooledListLength;               // length of pooled list
-    private static String name;                        // name of database
     private double listMean;                           // number list mean
     private double listMedian;                         // number list median
     private double listSD;                             // number list standard deviation
     private double listVar;                            // number list variance
     private static ArrayList<Double> pooledList;       // pooled list of database values
+    private static ArrayList<DataSet> listOfDatasets;  // dataset list
 
-    // EFFECTS: constructs a new database with length set to 0
+    // EFFECTS: constructs a new database with given name, initializes list of datasets and pooled list, and sets all
+    //          associated statistics to 0
     public DataBase(String name) {
-        listOfDatasets = new ArrayList<>();
-        listLength = 0;
         DataBase.name = name;
-        pooledList = new ArrayList<>();
+        listLength = 0;
         pooledListLength = 0;
+        listMean = 0;
+        listMedian = 0;
+        listSD = 0;
+        listVar = 0;
+        pooledList = new ArrayList<>();
+        listOfDatasets = new ArrayList<>();
     }
 
     // MODIFIES: this
@@ -38,7 +43,7 @@ public class DataBase implements Writable {
     }
 
     // MODIFIES: this
-    // EFFECTS: adds the given number to the pooled database
+    // EFFECTS: adds the given number to the pooled list
     public void addNumToPool(Double number) {
         pooledList.add(number);
         pooledListLength++;
@@ -49,12 +54,6 @@ public class DataBase implements Writable {
     public void removeNumFromPool(Double number) {
         pooledList.remove(number);
         pooledListLength--;
-
-    }
-
-    // EFFECTS: returns the pooled list of numbers
-    public ArrayList<Double> getPooledList() {
-        return pooledList;
     }
 
     // MODIFIES: this
@@ -62,11 +61,10 @@ public class DataBase implements Writable {
     public ArrayList<Double> removeList(String listName) {
         ArrayList<Double> tempData = new ArrayList<>();
         for (int i = 0; i < listLength; i++) {
-            if (listOfDatasets.get(i).getListName().equals(listName)) {
+            if (listOfDatasets.get(i).getListName().equalsIgnoreCase(listName)) {
                 tempData = listOfDatasets.get(i).getList();
                 listOfDatasets.remove(i);
                 listLength--;
-
                 return tempData;
             }
         }
@@ -80,6 +78,11 @@ public class DataBase implements Writable {
         pooledList.clear();
         listLength = 0;
         pooledListLength = 0;
+    }
+
+    // EFFECTS: returns the pooled list of numbers
+    public ArrayList<Double> getPooledList() {
+        return pooledList;
     }
 
     // EFFECTS: returns database name
@@ -97,7 +100,7 @@ public class DataBase implements Writable {
         return listLength;
     }
 
-    // EFFECTS: returns this database's length
+    // EFFECTS: returns this database's pooled list length
     public int getPooledListLength() {
         return pooledListLength;
     }
@@ -107,22 +110,22 @@ public class DataBase implements Writable {
         return listOfDatasets.get(index);
     }
 
-    // EFFECTS: returns list mean
+    // EFFECTS: returns pooled list mean
     public double getListMean() {
         return listMean;
     }
 
-    // EFFECTS: returns list median
+    // EFFECTS: returns pooled list median
     public double getListMedian() {
         return listMedian;
     }
 
-    // EFFECTS: returns list standard deviation
+    // EFFECTS: returns pooled list standard deviation
     public double getListSD() {
         return listSD;
     }
 
-    // EFFECTS: returns list variance
+    // EFFECTS: returns pooled list variance
     public double getListVar() {
         return listVar;
     }
@@ -130,47 +133,47 @@ public class DataBase implements Writable {
     // MODIFIES: this
     // EFFECTS: sets listLength to value of passed in list length
     public void setListLength(int listLength) {
-        this.listLength = listLength;
+        DataBase.listLength = listLength;
     }
 
     // MODIFIES: this
-    // EFFECTS: sets listLength to value of passed in list length
+    // EFFECTS: sets pooled list length to value of passed in list length
     public void setPooledListLength(int listLength) {
         pooledListLength = listLength;
     }
 
     // MODIFIES: this
-    // EFFECTS: sets listMean to value of passed in list mean
+    // EFFECTS: sets pooled list mean to value of passed in list mean
     public void setListMean(double listMean) {
         this.listMean = listMean;
     }
 
     // MODIFIES: this
-    // EFFECTS: sets listMedian to value of passed in list median
+    // EFFECTS: sets pooled list median to value of passed in list median
     public void setListMedian(double listMedian) {
         this.listMedian = listMedian;
     }
 
     // MODIFIES: this
-    // EFFECTS: sets listSD to value of passed in list standard deviation
+    // EFFECTS: sets pooled list standard deviation to value of passed in list standard deviation
     public void setListSD(double listSD) {
         this.listSD = listSD;
     }
 
     // MODIFIES: this
-    // EFFECTS: sets listVar to value of passed in list variance
+    // EFFECTS: sets pooled list variance to value of passed in list variance
     public void setListVar(double listVar) {
         this.listVar = listVar;
     }
 
     // MODIFIES: this
-    // EFFECTS: sets numList to passed in number list
+    // EFFECTS: sets pooled list to passed in number list
     public void setPooledList(ArrayList<Double> numList) {
         pooledList = numList;
     }
 
     // MODIFIES: this
-    // EFFECTS: calculates and updates dataset mean
+    // EFFECTS: calculates and updates pooled list mean
     public void calcMean() {
         double sum = 0;
         if (pooledListLength == 0) {
@@ -184,22 +187,22 @@ public class DataBase implements Writable {
     }
 
     // MODIFIES: this
-    // EFFECTS: calculates and updates dataset median
+    // EFFECTS: calculates and updates pooled list median
     public void calcMedian() {
         ArrayList<Double> tempList = (ArrayList) pooledList.clone();
         Collections.sort(tempList);
         if (pooledListLength == 0) {
             listMedian = 0;
         } else if (pooledListLength % 2 == 0) {
-            listMedian = (tempList.get((int) (pooledListLength / 2)) + tempList.get((int) (pooledListLength / 2 - 1)))
+            listMedian = (tempList.get(pooledListLength / 2) + tempList.get(pooledListLength / 2 - 1))
                     / 2;
         } else {
-            listMedian = tempList.get((int) (pooledListLength / 2));
+            listMedian = tempList.get(pooledListLength / 2);
         }
     }
 
     // MODIFIES: this
-    // EFFECTS: calculates and updates dataset variance
+    // EFFECTS: calculates and updates pooled list variance
     public void calcVariance() {
         if (pooledListLength == 0) {
             listVar = 0;
@@ -214,7 +217,7 @@ public class DataBase implements Writable {
     }
 
     // MODIFIES: this
-    // EFFECTS: calculates and updates dataset standard deviation
+    // EFFECTS: calculates and updates pooled list standard deviation
     public void calcSD() {
         calcVariance();
         listSD = sqrt(listVar);
@@ -247,7 +250,7 @@ public class DataBase implements Writable {
 */
 
     // MODIFIES: this
-    // EFFECTS: calculates and updates dataset standard deviation and mean and calculates the confidence interval
+    // EFFECTS: calculates and updates pooled list standard deviation and mean and calculates the confidence interval
     //          with given z score
     public String calcConfInterval(double z) {
         double lowerBound;
@@ -266,7 +269,7 @@ public class DataBase implements Writable {
     }
 
     // MODIFIES: this
-    // EFFECTS: sorts the dataset number list from small to large
+    // EFFECTS: sorts the pooled number list from small to large
     public void sortList() {
         Collections.sort(pooledList);
     }
@@ -287,6 +290,7 @@ public class DataBase implements Writable {
         return json;
     }
 
+    // EFFECTS: returns JSONArray version of the pooled number list in database
     private JSONArray pooledListToJson() {
         JSONArray jsonArray = new JSONArray();
         for (double num : pooledList) {
