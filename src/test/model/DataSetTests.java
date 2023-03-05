@@ -114,6 +114,7 @@ class DataSetTests {
         assertEquals("[62.979184719828694, 87.0208152801713]", testDataSet.calcConfInterval(0.68));
         assertEquals("[75.0, 75.0]", testDataSet.calcConfInterval(0));
     }
+
     @Test
     public void testGetZ() {
         assertEquals(3, DataSet.getZ(0.997));

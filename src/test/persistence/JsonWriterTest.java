@@ -13,7 +13,7 @@ public class JsonWriterTest extends JsonTest{
     @Test
     void testWriterInvalidFile() {
         try {
-            DataBase dataBase = new DataBase("DataBase");
+            DataBase dataBase = new DataBase("Database");
             JsonWriter writer = new JsonWriter("./data/my\0illegal:fileName.json");
             writer.open();
             fail("IOException was expected");
@@ -25,7 +25,7 @@ public class JsonWriterTest extends JsonTest{
     @Test
     void testWriterEmptyDataBase(){
         try {
-            DataBase dataBase = new DataBase("DataBase");
+            DataBase dataBase = new DataBase("Database");
             JsonWriter writer = new JsonWriter("./data/testWriterEmptyDataBase.json");
             writer.open();
             writer.write(dataBase);
@@ -33,8 +33,9 @@ public class JsonWriterTest extends JsonTest{
 
             JsonReader reader = new JsonReader("./data/testWriterEmptyDataBase.json");
             dataBase = reader.read();
-            assertEquals(0, dataBase.getListLength());
-            assertEquals("DataBase", dataBase.getName());
+            ArrayList<Double> tempList = new ArrayList<>();
+            checkDataBase("Database", 0, 0, 0, 0, 0, 0,
+                    tempList, dataBase);
         } catch (IOException e) {
             fail("Exception should not have been thrown");
         }
@@ -43,7 +44,7 @@ public class JsonWriterTest extends JsonTest{
     @Test
     void testWriterGeneralDataBase() {
         try {
-            DataBase dataBase = new DataBase("DataBase");
+            DataBase dataBase = new DataBase("Database");
             dataBase.addList("List1");
             dataBase.addList("List2");
             dataBase.getData(0).addNum(10.2);
@@ -58,6 +59,15 @@ public class JsonWriterTest extends JsonTest{
             dataBase.getData(1).calcMedian();
             dataBase.getData(1).calcSD();
             dataBase.getData(1).calcVariance();
+            dataBase.addNumToPool(10.2);
+            dataBase.addNumToPool(12.4);
+            dataBase.addNumToPool(10.0);
+            dataBase.addNumToPool(10.0);
+            dataBase.calcMean();
+            dataBase.calcSD();
+            dataBase.calcMedian();
+            dataBase.calcVariance();
+
             JsonWriter writer = new JsonWriter("./data/testWriterGeneralDataBase.json");
             writer.open();
             writer.write(dataBase);
@@ -65,9 +75,14 @@ public class JsonWriterTest extends JsonTest{
 
             JsonReader reader = new JsonReader("./data/testWriterGeneralDataBase.json");
             dataBase = reader.read();
-            assertEquals("DataBase", dataBase.getName());
             ArrayList<DataSet> dataSets = dataBase.getDataSets();
-            assertEquals(2, dataSets.size());
+            ArrayList<Double> tempNumList = new ArrayList<>();
+            tempNumList.add(10.2);
+            tempNumList.add(12.4);
+            tempNumList.add(10.0);
+            tempNumList.add(10.0);
+            checkDataBase("Database", 2, 10.65, 10.1, 1.013656746635665,
+                    4, 1.0275000000000005, tempNumList, dataBase);
             checkDataSet("List1", 2,11.3,11.3,1.1000000000000005,
                     1.2100000000000013, dataSets.get(0).getList(), dataSets.get(0));
             checkDataSet("List2", 2,10,10,0,0,

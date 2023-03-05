@@ -27,10 +27,10 @@ public class JsonReaderTest extends JsonTest{
         try {
             DataBase dataBase = reader.read();
             ArrayList<DataSet> dataSets = dataBase.getDataSets();
-            ArrayList<Double> numList = dataSets.get(0).getList();
-            assertEquals(1, dataSets.size());
-            assertEquals("DataBase", dataBase.getName());
-            checkDataSet("Pooled List", 0,0,0,0,0, numList, dataSets.get(0));
+            ArrayList<Double> numList = dataBase.getPooledList();
+            ArrayList<Double> pooledList = new ArrayList<>();
+            checkDataBase("Database", 0, 0, 0, 0, 0, 0,
+                    pooledList, dataBase);
         } catch (IOException e) {
             fail("File read failed");
         }
@@ -41,15 +41,19 @@ public class JsonReaderTest extends JsonTest{
         JsonReader reader = new JsonReader("./data/testReaderGeneralDataBase.json");
         try {
             DataBase dataBase = reader.read();
-            assertEquals("DataBase", dataBase.getName());
             ArrayList<DataSet> dataSets = dataBase.getDataSets();
-            assertEquals(3, dataSets.size());
-            checkDataSet("Pooled List", 4,87.5,100,21.650635094610966,
-                    468.75, dataSets.get(0).getList(), dataSets.get(0));
-            checkDataSet("List1", 2,100,100,0,0, dataSets.get(1).getList(),
-                    dataSets.get(1));
-            checkDataSet("List2", 2,75,75,25,625,
-                    dataSets.get(2).getList(), dataSets.get(2));
+            ArrayList<Double> pooledList = new ArrayList<>();
+            pooledList.add(100.0);
+            pooledList.add(100.0);
+            pooledList.add(50.0);
+            pooledList.add(100.0);
+
+            checkDataBase("Database", 2, 87.5, 100, 21.650635094610966,
+                    4, 468.75, pooledList, dataBase);
+            checkDataSet("list 1", 2,100,100,0,0, dataSets.get(0).getList(),
+                    dataSets.get(0));
+            checkDataSet("list 2", 2,75,75,25,625,
+                    dataSets.get(1).getList(), dataSets.get(1));
         } catch (IOException e) {
             fail("Couldn't read from file");
         }

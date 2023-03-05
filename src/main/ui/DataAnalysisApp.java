@@ -131,6 +131,10 @@ public class DataAnalysisApp {
         for (double num : dataBase.getPooledList()) {
             System.out.println(num);
         }
+        dataBase.calcMean();
+        dataBase.calcMedian();
+        dataBase.calcSD();
+        dataBase.calcVariance();
         System.out.println("\nLength: " + dataBase.getPooledListLength());
         System.out.println("Mean: " + dataBase.getListMean());
         System.out.println("Median: " + dataBase.getListMedian());
@@ -379,7 +383,7 @@ public class DataAnalysisApp {
     // MODIFIES: this, dataBase
     // EFFECTS: initializes datasets and Scanners
     private void initialize() {
-        dataBase = new DataBase("Pooled List");
+        dataBase = new DataBase("Database");
         input = new Scanner(System.in);
         input.useDelimiter("\n");
         innerInput = new Scanner(System.in);
@@ -390,9 +394,11 @@ public class DataAnalysisApp {
 
     // EFFECTS: shows main UI menu
     private void showMainMenu() {
-        System.out.println("\nPlease select from following: ");
-        System.out.println("\nLists: ");
-        System.out.println("\t\"" + dataBase.getListName() + "\"");
+        System.out.println("\nPlease select from following: \n");
+        System.out.println(dataBase.getName());
+        System.out.println("------------------");
+        System.out.println("Lists: ");
+        System.out.println("\t\"" + "Pooled List" + "\"");
         for (DataSet data : dataBase.getDataSets()) {
             System.out.println("\t\"" + data.getListName() + "\"");
         }

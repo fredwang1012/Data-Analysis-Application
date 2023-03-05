@@ -1,13 +1,11 @@
 {
-    "listOfDatasets": [{
-        "listVar": 0,
-        "listMean": 0,
-        "listMedian": 0,
-        "listSD": 0,
-        "listName": "Pooled List",
-        "numList": [],
-        "listLength": 0
-    }],
-    "name": "DataBase",
-    "listLength": 1
+    "listVar": 0,
+    "listMean": 0,
+    "listMedian": 0,
+    "pooledListLength": 0,
+    "listOfDatasets": [],
+    "listSD": 0,
+    "pooledList": [],
+    "name": "Database",
+    "listLength": 0
 }

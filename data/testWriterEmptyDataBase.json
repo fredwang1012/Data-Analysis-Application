@@ -1,5 +1,11 @@
 {
+    "listVar": 0,
+    "listMean": 0,
+    "listMedian": 0,
+    "pooledListLength": 0,
     "listOfDatasets": [],
-    "name": "DataBase",
+    "listSD": 0,
+    "pooledList": [],
+    "name": "Database",
     "listLength": 0
 }

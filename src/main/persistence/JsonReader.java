@@ -45,10 +45,10 @@ public class JsonReader {
         addDataSets(dataBase, jsonObject);
         dataBase.setPooledListLength(jsonObject.getInt("pooledListLength"));
         dataBase.setListLength(jsonObject.getInt("listLength"));
-        dataBase.setListSD(jsonObject.getInt("listSD"));
-        dataBase.setListVar(jsonObject.getInt("listVar"));
-        dataBase.setListMean(jsonObject.getInt("listMean"));
-        dataBase.setListMedian(jsonObject.getInt("listMedian"));
+        dataBase.setListSD(jsonObject.getDouble("listSD"));
+        dataBase.setListVar(jsonObject.getDouble("listVar"));
+        dataBase.setListMean(jsonObject.getDouble("listMean"));
+        dataBase.setListMedian(jsonObject.getDouble("listMedian"));
         dataBase.setPooledList(makePooledList(jsonObject.getJSONArray("pooledList")));
 
         return dataBase;

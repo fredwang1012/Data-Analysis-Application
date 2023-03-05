@@ -4,7 +4,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -28,6 +27,7 @@ public class DataBase implements Writable {
         listLength = 0;
         DataBase.name = name;
         pooledList = new ArrayList<>();
+        pooledListLength = 0;
     }
 
     // MODIFIES: this
@@ -66,6 +66,7 @@ public class DataBase implements Writable {
                 tempData = listOfDatasets.get(i).getList();
                 listOfDatasets.remove(i);
                 listLength--;
+
                 return tempData;
             }
         }
@@ -104,11 +105,6 @@ public class DataBase implements Writable {
     // EFFECTS: returns the DataSet at given index of dataset
     public DataSet getData(int index) {
         return listOfDatasets.get(index);
-    }
-
-    // EFFECTS: returns list name
-    public String getListName() {
-        return name;
     }
 
     // EFFECTS: returns list mean
@@ -269,29 +265,6 @@ public class DataBase implements Writable {
         return "[" + lowerBound + ", " + upperBound + "]";
     }
 
-    // EFFECTS: returns the estimated z score with given confidence level
-    public static double getZ(double confLevel) {
-        double z;
-        if (confLevel == 0.997) {
-            z = 3;
-        } else if (confLevel == 0.99) {
-            z = 2.576;
-        } else if (confLevel == 0.95) {
-            z = 1.96;
-        } else if (confLevel == 0.9) {
-            z = 1.645;
-        } else if (confLevel == 0.8) {
-            z = 1.282;
-        } else if (confLevel == 0.75) {
-            z = 1.15;
-        } else if (confLevel == 0.5) {
-            z = 0.68;
-        } else {
-            z = 0;
-        }
-        return z;
-    }
-
     // MODIFIES: this
     // EFFECTS: sorts the dataset number list from small to large
     public void sortList() {
@@ -310,11 +283,11 @@ public class DataBase implements Writable {
         json.put("listSD", listSD);
         json.put("listVar", listVar);
         json.put("pooledListLength", pooledListLength);
-        json.put("pooledList", pooleListToJson());
+        json.put("pooledList", pooledListToJson());
         return json;
     }
 
-    private JSONArray pooleListToJson() {
+    private JSONArray pooledListToJson() {
         JSONArray jsonArray = new JSONArray();
         for (double num : pooledList) {
             jsonArray.put(num);
