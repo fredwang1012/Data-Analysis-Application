@@ -7,7 +7,8 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-// superclass for JSON tests based on JSON serialization demo
+// superclass for JSON tests based on JSON serialization demo:
+// https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
 public class JsonTest {
     public void checkDataSet(String listName, int listLength, double listMean, double listMedian, double listSD,
                              double listVar, ArrayList<Double> numList, DataSet dataSet) {

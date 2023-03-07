@@ -34,8 +34,10 @@ into the functionality of the program, developing, this into the **ultimate** to
 - As a user, I want to be able to create confidence intervals with a dataset
 - As a user, I want to be able to remove individual entries in a dataset
 - As a user, I want to be able to sort datasets from small to large 
-- As a user, I want to be able to save an entire database to file
+- As a user, I want to be able to save an entire database to file (based on JsonWriter in JsonSerializationDemo 
+https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo)
+- As a user, I want to be given the option to load a saved database to the program to file (based on JsonReader in
+JsonSerializationDemo https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo)
 - As a user, I want to be reminded and given the option to save the entire database to file when I quit the program
-- As a user, I want to be given the option to load a saved database to the program to file
 
  

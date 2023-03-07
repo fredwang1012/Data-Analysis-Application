@@ -9,7 +9,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.IOException;
 import java.util.ArrayList;
 
-// test class for JSON reader based on JSON reader test class from JSON serialization demo
+// test class for JSON reader based on JSON reader test class from JSON serialization demo:
+// https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
 public class JsonReaderTest extends JsonTest{
 
     @Test

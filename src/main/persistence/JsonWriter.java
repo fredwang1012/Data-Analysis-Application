@@ -7,7 +7,8 @@ import org.json.JSONObject;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
-// a writer for DataBase that writes DataBase data to JSON file (implementation based on JSON serialization demo)
+// a writer for DataBase that writes DataBase data to JSON file (implementation based on JSON serialization demo):
+// https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
 public class JsonWriter {
     private static final int TAB = 4;       // indent factor for JSON
     private PrintWriter writer;             // JSON writer for DataBase

@@ -10,7 +10,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
-// test class for JSON writer based on JSON writer test class from JSON serialization demo
+// test class for JSON writer based on JSON writer test class from JSON serialization demo:
+// https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
+
 public class JsonWriterTest extends JsonTest{
     @Test
     void testWriterInvalidFile() {

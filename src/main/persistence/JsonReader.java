@@ -13,7 +13,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
-// a reader for DataBase that reads DataBase data from JSON file (implementation based on JSON serialization demo)
+// a reader for DataBase that reads DataBase data from JSON file (implementation based on JSON serialization demo):
+// https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
 public class JsonReader {
     private final String source;    // source for the JSON file
 
