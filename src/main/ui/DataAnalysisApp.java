@@ -5,9 +5,11 @@ import model.DataBase;
 
 import persistence.*;
 
+import java.awt.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
+import javax.swing.*;
 
 // Data analysis application
 public class DataAnalysisApp {
@@ -16,7 +18,8 @@ public class DataAnalysisApp {
     private Scanner input;          // scanner used for processing main menu inputs
     private JsonWriter jsonWriter;  // writer used for writing Json file
     private JsonReader jsonReader;  // reader used for reading Json file
-
+    private JPanel panel;
+    private JFrame frame;
 
     // EFFECTS: runs the data analysis application
     public DataAnalysisApp() throws FileNotFoundException {
@@ -380,10 +383,26 @@ public class DataAnalysisApp {
         input.useDelimiter("\n");
         jsonReader = new JsonReader(JSON_STORE);
         jsonWriter = new JsonWriter(JSON_STORE);
+        guiWindowSetup();
+    }
+
+    private void guiWindowSetup() {
+        frame = new JFrame();
+        panel = new JPanel();
+
+        panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
+        panel.setLayout(new GridLayout(0, 1));
+
+        frame.add(panel, BorderLayout.CENTER);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setTitle("Data Analysis App");
+        frame.pack();
+        frame.setVisible(true);
     }
 
     // EFFECTS: shows main UI menu
     private void showMainMenu() {
+        guiMainMenu();
         System.out.println("\nPlease select from following: \n");
         System.out.println(dataBase.getName());
         System.out.println("------------------");
@@ -398,6 +417,42 @@ public class DataAnalysisApp {
         System.out.println("\"s\" -> Save");
         System.out.println("\"l\" -> Load");
         System.out.println("\"q\" -> Quit");
+    }
+
+    private void guiMainMenu() {
+        Map<String, JButton> listOfDataButtons = new HashMap<>();
+        panel.removeAll();
+        JLabel line1 = new JLabel("Lists: ");
+        JLabel line2 = new JLabel("Commands:");
+        JButton button = new JButton("Pooled List");
+        JButton newList = new JButton("New List");
+        JButton removeList = new JButton("Remove List");
+        JButton clearAll = new JButton("Clear All");
+        JButton save = new JButton("Save");
+        JButton load = new JButton("Load");
+        JButton quit = new JButton("Quit");
+        listOfDataButtons.put("Pooled List", button);
+        for (DataSet dataSet : dataBase.getDataSets()) {
+            JButton temp = new JButton(dataSet.getListName());
+            listOfDataButtons.put(dataSet.getListName(), temp);
+        }
+        addButtons(listOfDataButtons, line1, line2, newList, removeList, clearAll, save, load,
+                quit);
+    }
+
+    private void addButtons(Map<String, JButton> listOfDataButtons, JLabel line1, JLabel line2, JButton newList,
+                            JButton removeList, JButton clearAll, JButton save, JButton load, JButton quit) {
+        panel.add(line1);
+        for (String s : listOfDataButtons.keySet()) {
+            panel.add(listOfDataButtons.get(s));
+        }
+        panel.add(line2);
+        panel.add(newList);
+        panel.add(removeList);
+        panel.add(clearAll);
+        panel.add(save);
+        panel.add(load);
+        panel.add(quit);
     }
 
 
