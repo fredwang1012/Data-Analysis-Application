@@ -6,6 +6,7 @@ import model.DataBase;
 import persistence.*;
 
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
@@ -20,6 +21,7 @@ public class DataAnalysisApp {
     private JsonReader jsonReader;  // reader used for reading Json file
     private JPanel panel;
     private JFrame frame;
+    private Map<String, JButton> listOfDataButtons;
 
     // EFFECTS: runs the data analysis application
     public DataAnalysisApp() throws FileNotFoundException {
@@ -32,23 +34,29 @@ public class DataAnalysisApp {
     // MODIFIES: this
     // EFFECTS: keeps the app running
     private void runApp() {
-        boolean run = true;
         String order;
         initialize();
         System.out.println("Welcome!");
-        while (run) {
+        while (true) {
             showMainMenu();
+            setUpMainMenuButtons();
             order = input.next();
             order = order.toLowerCase();
-
             if (order.equals("q")) {
-                run = false;
+                saveReminder();
+                System.out.println("Thanks for using!");
+                System.exit(0);
             } else {
                 processOrder(order);
             }
         }
-        saveReminder();
-        System.out.println("Thanks for using!");
+    }
+
+    private void setUpMainMenuButtons() {
+        for (String s : listOfDataButtons.keySet()) {
+            ActionListener temp = e -> guiProcessOrder(s);
+            listOfDataButtons.get(s).addActionListener(temp);
+        }
     }
 
     // EFFECTS: reminds user to save database and allows for saving
@@ -66,6 +74,106 @@ public class DataAnalysisApp {
             }
             System.err.println("Invalid input!");
         }
+    }
+
+    private void guiProcessOrder(String order) {
+        if (order.equalsIgnoreCase("pooled list")) {
+            guiListUI(null, true);
+        } else if (isInList(order)) {
+            for (DataSet data : dataBase.getDataSets()) {
+                if (order.equalsIgnoreCase(data.getListName())) {
+                    guiListUI(data, false);
+                }
+            }
+        }
+    }
+
+    private void guiListUI(DataSet dataSet, boolean isPool) {
+        if (isPool) {
+            guiPooledListUI();
+        } else {
+            guiNormalListUI(dataSet);
+        }
+    }
+
+    private void guiPooledListUI() {
+        panel.removeAll();
+        frame.setVisible(false);
+        frame.setVisible(true);
+        panel.add(new JLabel("Pooled List:"));
+        for (double d : dataBase.getPooledList()) {
+            panel.add(new JLabel(String.valueOf(d)));
+        }
+        panel.add(new JLabel("Length: " + dataBase.getPooledListLength()));
+        panel.add(new JLabel("Mean: " + dataBase.getListMean()));
+        panel.add(new JLabel("Median: " + dataBase.getListMedian()));
+        panel.add(new JLabel("Variance: " + dataBase.getListVar()));
+        panel.add(new JLabel("Standard Deviation: " + dataBase.getListSD()));
+        addListButtons(true, null);
+    }
+
+    private void addListButtons(boolean isPool, DataSet dataSet) {
+        JButton sort = new JButton("Sort");
+        JButton confInt = new JButton("Confidence Interval");
+        JButton back = new JButton("Back");
+        buttonActionAssignment(isPool, dataSet, sort, confInt, back);
+        panel.add(sort);
+        panel.add(confInt);
+        panel.add(back);
+    }
+
+    private void buttonActionAssignment(boolean isPool, DataSet dataSet, JButton sort, JButton confInt, JButton back) {
+        sort.addActionListener(e -> {
+            if (isPool) {
+                dataBase.sortList();
+                guiPooledListUI();
+            } else {
+                dataSet.sortList();
+                guiNormalListUI(dataSet);
+            }
+        });
+        confInt.addActionListener(e -> confIntDialogue(dataSet));
+        back.addActionListener(e -> guiMainMenu());
+        if (!isPool) {
+            JButton add = new JButton("Add");
+            JButton remove = new JButton("Remove");
+            add.addActionListener(e -> {
+                addNumberDialogue(dataSet);
+                guiNormalListUI(dataSet);
+            });
+            remove.addActionListener(e -> {
+                removeNumberDialogue(dataSet);
+                guiNormalListUI(dataSet);
+            });
+        }
+    }
+
+    private void addNumberDialogue(DataSet dataSet) {
+        //TODO
+    }
+
+    private void removeNumberDialogue(DataSet dataSet) {
+        //TODO
+    }
+
+    private void guiNormalListUI(DataSet dataSet) {
+        panel.removeAll();
+        frame.setVisible(false);
+        frame.setVisible(true);
+        panel.add(new JLabel(dataSet.getListName()));
+        for (double d : dataSet.getList()) {
+            panel.add(new JLabel(String.valueOf(d)));
+        }
+        panel.add(new JLabel("Length: " + dataSet.getListLength()));
+        panel.add(new JLabel("Mean: " + dataSet.getListMean()));
+        panel.add(new JLabel("Median: " + dataSet.getListMedian()));
+        panel.add(new JLabel("Variance: " + dataSet.getListVar()));
+        panel.add(new JLabel("Standard Deviation: " + dataSet.getListSD()));
+        addListButtons(false, dataSet);
+    }
+
+    private void confIntDialogue(DataSet dataSet) {
+        //TODO
     }
 
     // MODIFIES: this, dataBase
@@ -391,7 +499,7 @@ public class DataAnalysisApp {
         panel = new JPanel();
 
         panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
-        panel.setLayout(new GridLayout(0, 1));
+        panel.setLayout(new GridLayout(15, 30));
 
         frame.add(panel, BorderLayout.CENTER);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -420,9 +528,11 @@ public class DataAnalysisApp {
     }
 
     private void guiMainMenu() {
-        Map<String, JButton> listOfDataButtons = new HashMap<>();
+        listOfDataButtons = new LinkedHashMap<>();
         panel.removeAll();
-        JLabel line1 = new JLabel("Lists: ");
+        frame.setVisible(false);
+        frame.setVisible(true);
+        JLabel line1 = new JLabel("Lists:");
         JLabel line2 = new JLabel("Commands:");
         JButton button = new JButton("Pooled List");
         JButton newList = new JButton("New List");
@@ -436,8 +546,44 @@ public class DataAnalysisApp {
             JButton temp = new JButton(dataSet.getListName());
             listOfDataButtons.put(dataSet.getListName(), temp);
         }
-        addButtons(listOfDataButtons, line1, line2, newList, removeList, clearAll, save, load,
-                quit);
+        addButtons(listOfDataButtons, line1, line2, newList, removeList, clearAll, save, load, quit);
+        assignMenuButtonActions(newList, removeList, clearAll, save, load, quit);
+        setUpMainMenuButtons();
+    }
+
+    private void assignMenuButtonActions(JButton newList, JButton removeList, JButton clearAll, JButton save,
+                                         JButton load, JButton quit) {
+        newList.addActionListener(e -> newListDialogue());
+        removeList.addActionListener(e -> removeListDialogue());
+        clearAll.addActionListener(e -> {
+            dataBase.clearAll();
+            showMainMenu();
+        });
+        save.addActionListener(e -> {
+            saveDataBase();
+            saveDialogue();
+        });
+        load.addActionListener(e -> {
+            loadDataBase();
+            showMainMenu();
+        });
+        quit.addActionListener(e -> quitDialogue());
+    }
+
+    private void newListDialogue() {
+        //TODO
+    }
+
+    private void removeListDialogue() {
+        //TODO
+    }
+
+    private void saveDialogue() {
+        //TODO
+    }
+
+    private void quitDialogue() {
+        //TODO
     }
 
     private void addButtons(Map<String, JButton> listOfDataButtons, JLabel line1, JLabel line2, JButton newList,

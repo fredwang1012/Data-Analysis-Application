@@ -1,43 +1,27 @@
 {
-    "listVar": 6033.040000000001,
-    "listMean": 88.6,
-    "listMedian": 67,
-    "pooledListLength": 6,
-    "listOfDatasets": [
-        {
-            "listVar": 6033.04,
-            "listMean": 88.6,
-            "listMedian": 67,
-            "listSD": 77.67264640785712,
-            "listName": "asdf",
-            "numList": [
-                100,
-                45,
-                230,
-                1,
-                67
-            ],
-            "listLength": 5
-        },
-        {
-            "listVar": 0,
-            "listMean": 20,
-            "listMedian": 20,
-            "listSD": 0,
-            "listName": "list 1",
-            "numList": [20],
-            "listLength": 1
-        }
-    ],
-    "listSD": 77.67264640785713,
+    "listVar": 0,
+    "listMean": 0,
+    "listMedian": 0,
+    "pooledListLength": 3,
+    "listOfDatasets": [{
+        "listVar": 8420.222222222223,
+        "listMean": 70.33333333333333,
+        "listMedian": 10,
+        "listSD": 91.76176884859088,
+        "listName": "asdf",
+        "numList": [
+            1,
+            10,
+            200
+        ],
+        "listLength": 3
+    }],
+    "listSD": 0,
     "pooledList": [
         1,
-        45,
-        67,
-        100,
-        230,
-        20
+        10,
+        200
     ],
     "name": "Database",
-    "listLength": 2
+    "listLength": 1
 }

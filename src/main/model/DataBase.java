@@ -78,6 +78,10 @@ public class DataBase implements Writable {
         pooledList.clear();
         listLength = 0;
         pooledListLength = 0;
+        listMean = 0;
+        listMedian = 0;
+        listSD = 0;
+        listVar = 0;
     }
 
     // EFFECTS: returns the pooled list of numbers
