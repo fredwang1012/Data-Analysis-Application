@@ -46,7 +46,8 @@ JsonSerializationDemo https://github.students.cs.ubc.ca/CPSC210/JsonSerializatio
 - You can remove a dataset from the database by clicking the "remove" button and then entering the name of the dataset
 - You can add numbers to a dataset by first clicking a dataset and then clicking the "add" button and then entering a number
 - You can remove numbers from a dataset by first clicking a dataset and then clicking the "remove" button and then entering a number
-- You can locate my visual components in the main menu at the top and in the "exit" button as well as in the "back" button 
-in the list UI
+- You can locate my visual components in the main menu at the top (https://pixabay.com/photos/accountant-accounting-adviser-1238598/) 
+and in the "exit" button (https://pixabay.com/vectors/exit-the-end-emergency-exit-door-1699614/) as well as in the 
+"back" button (https://pixabay.com/vectors/arrow-left-back-backwards-sign-39644/) in the list UI
 - You can save the state of my application by clicking the "save" button
 - You can reload the state of my application by clicking the "load" button
