@@ -7,24 +7,31 @@ import persistence.*;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 // Data analysis application
 public class DataAnalysisApp {
     private static final String JSON_STORE = "./data/database.json";
-    private DataBase dataBase;      // database used to store datasets for application
-    private Scanner input;          // scanner used for processing main menu inputs
-    private JsonWriter jsonWriter;  // writer used for writing Json file
-    private JsonReader jsonReader;  // reader used for reading Json file
-    private JPanel panel;
-    private JFrame frame;
-    private Map<String, JButton> listOfDataButtons;
+    private DataBase dataBase;                          // database used to store datasets for application
+    private Scanner input;                              // scanner used for processing main menu inputs
+    private JsonWriter jsonWriter;                      // writer used for writing Json file
+    private JsonReader jsonReader;                      // reader used for reading Json file
+    private JPanel panel;                               // panel for main GUI
+    private JFrame frame;                               // frame for main GUI
+    private static JFrame subFrame;                     // frame for small sub frame
+    private Map<String, JButton> listOfDataButtons;     // map for the dataset buttons and their names
+    private BufferedImage image;                        // top bar image by Robert Owen-Wahl from Pixabay
+    private Icon backArrow;                             // back arrow image by Clker-Free-Vector-Images from Pixabay
+    private Icon exitSign;                              // exit symbol image by Jan from Pixabay
 
     // EFFECTS: runs the data analysis application
-    public DataAnalysisApp() throws FileNotFoundException {
+    public DataAnalysisApp() throws IOException {
         runApp();
     }
 
@@ -52,6 +59,8 @@ public class DataAnalysisApp {
         }
     }
 
+    // MODIFIES: panel
+    // EFFECTS: sets up the main menu buttons for the datasets
     private void setUpMainMenuButtons() {
         for (String s : listOfDataButtons.keySet()) {
             ActionListener temp = e -> guiProcessOrder(s);
@@ -76,6 +85,7 @@ public class DataAnalysisApp {
         }
     }
 
+    // EFFECTS: processes the buttons for lists in main menu
     private void guiProcessOrder(String order) {
         if (order.equalsIgnoreCase("pooled list")) {
             guiListUI(null, true);
@@ -88,6 +98,7 @@ public class DataAnalysisApp {
         }
     }
 
+    // EFFECTS: helper for GUI output
     private void guiListUI(DataSet dataSet, boolean isPool) {
         if (isPool) {
             guiPooledListUI();
@@ -96,14 +107,17 @@ public class DataAnalysisApp {
         }
     }
 
+    // MODIFIES: frame, panel, dataBase
+    // EFFECTS: creates the JPanel for the pooled list UI
     private void guiPooledListUI() {
         panel.removeAll();
-        frame.setVisible(false);
-        frame.setVisible(true);
+        SwingUtilities.updateComponentTreeUI(frame);
+
         panel.add(new JLabel("Pooled List:"));
         for (double d : dataBase.getPooledList()) {
             panel.add(new JLabel(String.valueOf(d)));
         }
+        updateStats();
         panel.add(new JLabel("Length: " + dataBase.getPooledListLength()));
         panel.add(new JLabel("Mean: " + dataBase.getListMean()));
         panel.add(new JLabel("Median: " + dataBase.getListMedian()));
@@ -112,16 +126,21 @@ public class DataAnalysisApp {
         addListButtons(true, null);
     }
 
+    // MODIFIES: panel
+    // EFFECTS: helper for adding list buttons
     private void addListButtons(boolean isPool, DataSet dataSet) {
         JButton sort = new JButton("Sort");
         JButton confInt = new JButton("Confidence Interval");
-        JButton back = new JButton("Back");
+        JButton back = new JButton(backArrow);
+        back.setText("Back");
         buttonActionAssignment(isPool, dataSet, sort, confInt, back);
         panel.add(sort);
         panel.add(confInt);
         panel.add(back);
     }
 
+    // MODIFIES: panel
+    // EFFECTS: assigns actions to buttons
     private void buttonActionAssignment(boolean isPool, DataSet dataSet, JButton sort, JButton confInt, JButton back) {
         sort.addActionListener(e -> {
             if (isPool) {
@@ -132,34 +151,164 @@ public class DataAnalysisApp {
                 guiNormalListUI(dataSet);
             }
         });
-        confInt.addActionListener(e -> confIntDialogue(dataSet));
+        confInt.addActionListener(e -> confIntDialogue(isPool, dataSet, ""));
         back.addActionListener(e -> guiMainMenu());
+        buttonActionAssignmentForGeneral(isPool, dataSet);
+    }
+
+    // MODIFIES: panel
+    // EFFECTS: helper for assigning actions to general dataset buttons
+    private void buttonActionAssignmentForGeneral(boolean isPool, DataSet dataSet) {
         if (!isPool) {
             JButton add = new JButton("Add");
             JButton remove = new JButton("Remove");
             add.addActionListener(e -> {
-                addNumberDialogue(dataSet);
+                addNumberDialogue(dataSet, "");
                 guiNormalListUI(dataSet);
             });
             remove.addActionListener(e -> {
-                removeNumberDialogue(dataSet);
+                removeNumberDialogue(dataSet, "");
                 guiNormalListUI(dataSet);
             });
+            panel.add(add);
+            panel.add(remove);
         }
     }
 
-    private void addNumberDialogue(DataSet dataSet) {
-        //TODO
+    // EFFECTS: produces the new JFrame for adding numbers
+    private void addNumberDialogue(DataSet dataSet, String message) {
+        JPanel addListPanel = makeSubJPanel("Add Number");
+        JLabel error = new JLabel(message);
+        JLabel instruction = new JLabel("Please enter a number to add to the dataset.");
+        JTextField textField = new JTextField(7);
+        JButton enter = new JButton("Enter");
+        addListPanel.add(error);
+        addListPanel.add(instruction);
+        addListPanel.add(textField);
+        addListPanel.add(enter);
+        enter.addActionListener(e -> handleNumberEntry(textField.getText(), addListPanel, dataSet));
     }
 
-    private void removeNumberDialogue(DataSet dataSet) {
-        //TODO
+    // MODIFIES: dataBase, frame, panel
+    // EFFECTS: assigns button actions for add number button
+    private void handleNumberEntry(String input, JPanel subPanel, DataSet dataSet) {
+        double number;
+        try {
+            number = Double.parseDouble(input);
+            dataSet.addNum(number);
+            dataBase.addNumToPool(number);
+            updateStats(dataSet);
+            subFrame.dispose();
+            subPanel.setVisible(false);
+            guiNormalListUI(dataSet);
+        } catch (NumberFormatException e) {
+            subFrame.dispose();
+            subPanel.setVisible(false);
+            addNumberDialogue(dataSet, "Entry was not a valid number!");
+        }
     }
 
+    // EFFECTS: produces the new JFrame for removing numbers
+    private void removeNumberDialogue(DataSet dataSet, String message) {
+        JPanel addListPanel = makeSubJPanel("Remove Number");
+        JLabel error = new JLabel(message);
+        JLabel instruction = new JLabel("Please enter a number to remove from the dataset.");
+        JTextField textField = new JTextField(7);
+        JButton enter = new JButton("Enter");
+        addListPanel.add(error);
+        addListPanel.add(instruction);
+        addListPanel.add(textField);
+        addListPanel.add(enter);
+        enter.addActionListener(e -> handleNumRemoval(textField.getText(), addListPanel, dataSet));
+    }
+
+    // MODIFIES: dataBase, frame, panel
+    // EFFECTS: assigns button actions for remove number button
+    private void handleNumRemoval(String input, JPanel subPanel, DataSet dataSet) {
+        double number;
+        boolean numRemoved;
+        try {
+            number = Double.parseDouble(input);
+            numRemoved = dataSet.removeNum(number);
+            if (numRemoved) {
+                dataBase.removeNumFromPool(number);
+                subFrame.dispose();
+                subPanel.setVisible(false);
+                updateStats(dataSet);
+                guiNormalListUI(dataSet);
+            } else {
+                subFrame.dispose();
+                subPanel.setVisible(false);
+                removeNumberDialogue(dataSet, "Entry was not an existing number!");
+            }
+        } catch (NumberFormatException e) {
+            subFrame.dispose();
+            subPanel.setVisible(false);
+            removeNumberDialogue(dataSet, "Entry was not a valid number!");
+        }
+    }
+
+    // EFFECTS: produces the new JFrame for confidence interval
+    private void confIntDialogue(boolean isPool, DataSet dataSet, String message) {
+        JPanel addListPanel = makeSubJPanel("Confidence Interval");
+        JLabel error = new JLabel(message);
+        JLabel instruction = new JLabel("Please enter a number one of the following confidence levels (e.g \"99\")");
+        JLabel confLevels = new JLabel("99.7%, \n99%, \n95%, \n90%, \n80%, \n75%, \n50%\n");
+        JTextField textField = new JTextField(7);
+        JButton enter = new JButton("Enter");
+        addListPanel.add(error);
+        addListPanel.add(instruction);
+        addListPanel.add(confLevels);
+        addListPanel.add(textField);
+        addListPanel.add(enter);
+        enter.addActionListener(e -> handleConfInt(isPool, textField.getText(), addListPanel, dataSet));
+    }
+
+    // EFFECTS: assigns button actions for confidence interval button
+    private void handleConfInt(boolean isPool, String input, JPanel panel, DataSet dataSet) {
+        double cl;
+        double z;
+        try {
+            cl = Double.parseDouble(input) / 100;
+            z = DataSet.getZ(cl);
+            subFrame.dispose();
+            panel.setVisible(false);
+            if (z == 0) {
+                confIntDialogue(isPool, dataSet, "Not a valid confidence level!");
+            } else {
+                guiConfIntOutput("Confidence Interval: \n" + ((dataSet == null) ? dataBase.calcConfInterval(z) :
+                        dataSet.calcConfInterval(z)), dataSet);
+            }
+        } catch (NumberFormatException e) {
+            subFrame.dispose();
+            panel.setVisible(false);
+            confIntDialogue(isPool, dataSet, "Entry was not a valid number!");
+        }
+    }
+
+    // EFFECTS: creates window for CI output
+    private void guiConfIntOutput(String output, DataSet dataSet) {
+        JPanel addListPanel = makeSubJPanel("Confidence Interval");
+        JLabel confInt = new JLabel(output);
+        addListPanel.add(confInt);
+        JButton okay = new JButton("Okay");
+        addListPanel.add(okay);
+        okay.addActionListener(e -> {
+            if (dataSet == null) {
+                subFrame.dispose();
+                guiPooledListUI();
+            } else {
+                subFrame.dispose();
+                guiNormalListUI(dataSet);
+            }
+        });
+    }
+
+    // MODIFIES: frame, panel
+    // EFFECTS: adds the buttons for the normal dataset UI
     private void guiNormalListUI(DataSet dataSet) {
         panel.removeAll();
-        frame.setVisible(false);
-        frame.setVisible(true);
+        SwingUtilities.updateComponentTreeUI(frame);
         panel.add(new JLabel(dataSet.getListName()));
         for (double d : dataSet.getList()) {
             panel.add(new JLabel(String.valueOf(d)));
@@ -170,10 +319,6 @@ public class DataAnalysisApp {
         panel.add(new JLabel("Variance: " + dataSet.getListVar()));
         panel.add(new JLabel("Standard Deviation: " + dataSet.getListSD()));
         addListButtons(false, dataSet);
-    }
-
-    private void confIntDialogue(DataSet dataSet) {
-        //TODO
     }
 
     // MODIFIES: this, dataBase
@@ -491,9 +636,18 @@ public class DataAnalysisApp {
         input.useDelimiter("\n");
         jsonReader = new JsonReader(JSON_STORE);
         jsonWriter = new JsonWriter(JSON_STORE);
+        backArrow = new ImageIcon("./data/arrow.png");
+        exitSign = new ImageIcon("./data/exit.png");
+        try {
+            image = ImageIO.read(new File("./data/image.jpg"));
+        } catch (IOException e) {
+            System.err.println("Cannot read image");
+        }
         guiWindowSetup();
     }
 
+    // MODIFIES: this, frame, panel
+    // EFFECTS: sets up the GUI main menu window
     private void guiWindowSetup() {
         frame = new JFrame();
         panel = new JPanel();
@@ -501,11 +655,13 @@ public class DataAnalysisApp {
         panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
         panel.setLayout(new GridLayout(15, 30));
 
+        frame.setSize(2000, 1500);
         frame.add(panel, BorderLayout.CENTER);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
         frame.setTitle("Data Analysis App");
-        frame.pack();
         frame.setVisible(true);
+
     }
 
     // EFFECTS: shows main UI menu
@@ -527,11 +683,14 @@ public class DataAnalysisApp {
         System.out.println("\"q\" -> Quit");
     }
 
+    // MODIFIES: frame, panel
+    // EFFECTS: adds buttons to the main GUI panel
     private void guiMainMenu() {
         listOfDataButtons = new LinkedHashMap<>();
         panel.removeAll();
-        frame.setVisible(false);
-        frame.setVisible(true);
+        SwingUtilities.updateComponentTreeUI(frame);
+        JLabel picture = new JLabel(new ImageIcon(image));
+        panel.add(picture);
         JLabel line1 = new JLabel("Lists:");
         JLabel line2 = new JLabel("Commands:");
         JButton button = new JButton("Pooled List");
@@ -540,7 +699,8 @@ public class DataAnalysisApp {
         JButton clearAll = new JButton("Clear All");
         JButton save = new JButton("Save");
         JButton load = new JButton("Load");
-        JButton quit = new JButton("Quit");
+        JButton quit = new JButton(exitSign);
+        quit.setText("Exit");
         listOfDataButtons.put("Pooled List", button);
         for (DataSet dataSet : dataBase.getDataSets()) {
             JButton temp = new JButton(dataSet.getListName());
@@ -551,10 +711,12 @@ public class DataAnalysisApp {
         setUpMainMenuButtons();
     }
 
+    // MODIFIES: panel
+    // EFFECTS: adds button actions to main menu buttons
     private void assignMenuButtonActions(JButton newList, JButton removeList, JButton clearAll, JButton save,
                                          JButton load, JButton quit) {
-        newList.addActionListener(e -> newListDialogue());
-        removeList.addActionListener(e -> removeListDialogue());
+        newList.addActionListener(e -> newListDialogue(""));
+        removeList.addActionListener(e -> removeListDialogue(""));
         clearAll.addActionListener(e -> {
             dataBase.clearAll();
             showMainMenu();
@@ -570,22 +732,126 @@ public class DataAnalysisApp {
         quit.addActionListener(e -> quitDialogue());
     }
 
-    private void newListDialogue() {
-        //TODO
+    // EFFECTS: produces new JPanel for adding new list
+    private void newListDialogue(String message) {
+        JPanel addListPanel = makeSubJPanel("Add List");
+        JLabel error = new JLabel(message);
+        JLabel instruction = new JLabel("Please enter unique name for the dataset.");
+        JTextField textField = new JTextField(7);
+        JButton enter = new JButton("Enter");
+        addListPanel.add(error);
+        addListPanel.add(instruction);
+        addListPanel.add(textField);
+        addListPanel.add(enter);
+        enter.addActionListener(e -> handleTextEntry(textField.getText(), addListPanel));
     }
 
-    private void removeListDialogue() {
-        //TODO
+    // EFFECTS: handles the text entry for adding list
+    private void handleTextEntry(String listName, JPanel subPanel) {
+        boolean listExists;
+        listExists = isInList(listName);
+        if (listExists) {
+            subFrame.dispose();
+            subPanel.setVisible(false);
+            newListDialogue("A list already has that name!");
+        } else if (listName.equals("")) {
+            subFrame.dispose();
+            subPanel.setVisible(false);
+            newListDialogue("Name cannot be empty!");
+        } else {
+            dataBase.addList(listName);
+            subFrame.dispose();
+            subPanel.setVisible(false);
+            guiMainMenu();
+        }
     }
 
+    // EFFECTS: helper for making the smaller sub panel
+    private static JPanel makeSubJPanel(String name) {
+        subFrame = new JFrame(name);
+        JPanel addListPanel = new JPanel();
+        addListPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+        addListPanel.setLayout(new GridLayout(5, 1));
+        subFrame.setSize(500, 300);
+        subFrame.add(addListPanel, BorderLayout.CENTER);
+        subFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        subFrame.setLocationRelativeTo(null);
+        subFrame.setVisible(true);
+        return addListPanel;
+    }
+
+    // EFFECTS: produces new JPanel for removing existing list
+    private void removeListDialogue(String message) {
+        JPanel addListPanel = makeSubJPanel("Remove List");
+        JLabel error = new JLabel(message);
+        JLabel instruction = new JLabel("Please enter the name of the dataset you would like to remove.");
+        JTextField textField = new JTextField(7);
+        JButton enter = new JButton("Enter");
+        addListPanel.add(error);
+        addListPanel.add(instruction);
+        addListPanel.add(textField);
+        addListPanel.add(enter);
+        enter.addActionListener(e -> handleRemoveTextEntry(textField.getText(), addListPanel));
+    }
+
+    // EFFECTS: handles the text entry for removing list
+    private void handleRemoveTextEntry(String name, JPanel panel) {
+        boolean listExists;
+        listExists = isInList(name);
+        if (name.equalsIgnoreCase("pooled list")) {
+            subFrame.dispose();
+            panel.setVisible(false);
+            removeListDialogue("You cannot remove the Pooled List!");
+        } else if (listExists) {
+            ArrayList<Double> numbersToRemove = dataBase.removeList(name);
+            for (double num : numbersToRemove) {
+                dataBase.removeNumFromPool(num);
+            }
+            dataBase.removeList(name);
+            subFrame.dispose();
+            panel.setVisible(false);
+            guiMainMenu();
+        } else {
+            subFrame.dispose();
+            panel.setVisible(false);
+            removeListDialogue("Given list does not exist!");
+        }
+    }
+
+
+    // EFFECTS: produces new JPanel for saving database
     private void saveDialogue() {
-        //TODO
+        JPanel savePanel = makeSubJPanel("Saved!");
+        JLabel message = new JLabel("Your database has been saved!");
+        JButton close = new JButton("Close");
+        close.addActionListener(e -> {
+            subFrame.dispose();
+            SwingUtilities.updateComponentTreeUI(subFrame);
+            guiMainMenu();
+        });
+        savePanel.add(message);
+        savePanel.add(close);
     }
 
+    // MODIFIES: this
+    // EFFECTS: produces new JPanel prompt for saving database when quitting
     private void quitDialogue() {
-        //TODO
+        JPanel savePanel = makeSubJPanel("Save Prompt");
+        JLabel message = new JLabel("Would you like to save before quitting?");
+        JButton yes = new JButton("Yes");
+        JButton no = new JButton("No");
+        yes.addActionListener(e -> {
+            saveDataBase();
+            System.exit(69);
+        });
+        no.addActionListener(e -> System.exit(420));
+        savePanel.add(message);
+        savePanel.add(yes);
+        savePanel.add(no);
     }
 
+    // MODIFIES: panel
+    // EFFECTS: adds all buttons to main GUI menu
     private void addButtons(Map<String, JButton> listOfDataButtons, JLabel line1, JLabel line2, JButton newList,
                             JButton removeList, JButton clearAll, JButton save, JButton load, JButton quit) {
         panel.add(line1);

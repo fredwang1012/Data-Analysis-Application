@@ -40,4 +40,13 @@ https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo)
 JsonSerializationDemo https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo)
 - As a user, I want to be reminded and given the option to save the entire database to file when I quit the program
 
- 
+ ### Instructions for Grader
+
+- You can add a dataset to the database by clicking the "add" button and then entering the name of the new dataset
+- You can remove a dataset from the database by clicking the "remove" button and then entering the name of the dataset
+- You can add numbers to a dataset by first clicking a dataset and then clicking the "add" button and then entering a number
+- You can remove numbers from a dataset by first clicking a dataset and then clicking the "remove" button and then entering a number
+- You can locate my visual components in the main menu at the top and in the "exit" button as well as in the "back" button 
+in the list UI
+- You can save the state of my application by clicking the "save" button
+- You can reload the state of my application by clicking the "load" button
