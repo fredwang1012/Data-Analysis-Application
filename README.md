@@ -51,3 +51,48 @@ and in the "exit" button (https://pixabay.com/vectors/exit-the-end-emergency-exi
 "back" button (https://pixabay.com/vectors/arrow-left-back-backwards-sign-39644/) in the list UI
 - You can save the state of my application by clicking the "save" button
 - You can reload the state of my application by clicking the "load" button
+
+### Phase 4: Task 2
+Example event log
+
+"Event log:
+Fri Apr 07 21:40:38 PDT 2023
+list 1 added to "Database" database,
+Fri Apr 07 21:40:38 PDT 2023
+list 2 added to "Database" database,
+Fri Apr 07 21:40:38 PDT 2023
+list 3 added to "Database" database,
+Fri Apr 07 21:40:38 PDT 2023
+"Database" database loaded from database.json,
+Fri Apr 07 21:40:43 PDT 2023
+list 4 added to "Database" database,
+Fri Apr 07 21:40:49 PDT 2023
+list 4 removed from "Database" database,
+Fri Apr 07 21:40:50 PDT 2023
+"Database" database cleared,
+Fri Apr 07 21:40:51 PDT 2023
+list 1 added to "Database" database,
+Fri Apr 07 21:40:51 PDT 2023
+list 2 added to "Database" database,
+Fri Apr 07 21:40:51 PDT 2023
+list 3 added to "Database" database,
+Fri Apr 07 21:40:51 PDT 2023
+"Database" database loaded from database.json,
+Fri Apr 07 21:40:52 PDT 2023
+"Database" database saved to database.json,
+Fri Apr 07 21:40:58 PDT 2023
+123.0 added to list 3,
+Fri Apr 07 21:40:58 PDT 2023
+123.0 added to Pooled List,
+Fri Apr 07 21:41:00 PDT 2023
+123.0 removed from list 3,
+Fri Apr 07 21:41:00 PDT 2023
+123.0 removed from Pooled List,
+Fri Apr 07 21:41:01 PDT 2023
+list 3 sorted,
+Fri Apr 07 21:41:04 PDT 2023
+list 3's confidence interval calculated,
+Fri Apr 07 21:41:09 PDT 2023
+Pooled List sorted,
+Fri Apr 07 21:41:12 PDT 2023
+"Database" database saved to database.json"

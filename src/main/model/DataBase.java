@@ -36,28 +36,34 @@ public class DataBase implements Writable {
     }
 
     // MODIFIES: this
-    // EFFECTS: adds a dataset with given String name to the database
+    // EFFECTS: adds a dataset with given String name to the database and records event in EventLog
     public void addList(String listName) {
         listOfDatasets.add(new DataSet(listName));
         listLength++;
+        EventLog.getInstance().logEvent(new Event(listName + " added to \"" + name + "\" database"));
+
     }
 
     // MODIFIES: this
-    // EFFECTS: adds the given number to the pooled list
+    // EFFECTS: adds the given number to the pooled list and records event in EventLog
     public void addNumToPool(Double number) {
         pooledList.add(number);
         pooledListLength++;
+        EventLog.getInstance().logEvent(new Event(number + " added to Pooled List"));
+
     }
 
     // MODIFIES: this
-    // EFFECTS: removes the given number from the pooled list
+    // EFFECTS: removes the given number from the pooled list and records event in EventLog
     public void removeNumFromPool(Double number) {
         pooledList.remove(number);
         pooledListLength--;
+        EventLog.getInstance().logEvent(new Event(number + " removed from Pooled List"));
     }
 
     // MODIFIES: this
-    // EFFECTS: removes a dataset with given String name from the database and returns numbers from removed list
+    // EFFECTS: removes a dataset with given String name from the database and returns numbers from removed list and
+    //          records event in EventLog
     public ArrayList<Double> removeList(String listName) {
         ArrayList<Double> tempData = new ArrayList<>();
         for (int i = 0; i < listLength; i++) {
@@ -65,6 +71,8 @@ public class DataBase implements Writable {
                 tempData = listOfDatasets.get(i).getList();
                 listOfDatasets.remove(i);
                 listLength--;
+                EventLog.getInstance().logEvent(new Event(listName + " removed from \"" + name
+                        + "\" database"));
                 return tempData;
             }
         }
@@ -72,7 +80,7 @@ public class DataBase implements Writable {
     }
 
     // MODIFIES: this
-    // EFFECTS: clears the database
+    // EFFECTS: clears the database and records event in EventLog
     public void clearAll() {
         listOfDatasets.clear();
         pooledList.clear();
@@ -82,6 +90,7 @@ public class DataBase implements Writable {
         listMedian = 0;
         listSD = 0;
         listVar = 0;
+        EventLog.getInstance().logEvent(new Event("\"" + name + "\" database cleared"));
     }
 
     // EFFECTS: returns the pooled list of numbers
@@ -255,7 +264,7 @@ public class DataBase implements Writable {
 
     // MODIFIES: this
     // EFFECTS: calculates and updates pooled list standard deviation and mean and calculates the confidence interval
-    //          with given z score
+    //          with given z score and records event in EventLog
     public String calcConfInterval(double z) {
         double lowerBound;
         double upperBound;
@@ -268,13 +277,14 @@ public class DataBase implements Writable {
         calcMean();
         lowerBound = listMean - (z * listSD / sqrt(pooledListLength));
         upperBound = listMean + (z * listSD / sqrt(pooledListLength));
-
+        EventLog.getInstance().logEvent(new Event("Pooled List confidence interval calculated"));
         return "[" + lowerBound + ", " + upperBound + "]";
     }
 
     // MODIFIES: this
-    // EFFECTS: sorts the pooled number list from small to large
+    // EFFECTS: sorts the pooled number list from small to large and records event in EventLog
     public void sortList() {
+        EventLog.getInstance().logEvent(new Event("Pooled List sorted"));
         Collections.sort(pooledList);
     }
 

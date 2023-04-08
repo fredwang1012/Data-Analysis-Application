@@ -98,19 +98,21 @@ public class DataSet implements Writable {
     }
 
     // MODIFIES: this
-    // EFFECTS: adds a number to dataset
+    // EFFECTS: adds a number to dataset and records event in EventLog
     public void addNum(double number) {
         numList.add(number);
         listLength++;
+        EventLog.getInstance().logEvent(new Event(number + " added to " + listName));
     }
 
     // MODIFIES: this
-    // EFFECTS: removes number from dataset
+    // EFFECTS: removes number from dataset and records event in EventLog
     public boolean removeNum(double number) {
         for (int i = 0; i < listLength; i++) {
             if (numList.get(i) == number) {
                 numList.remove(i);
                 listLength--;
+                EventLog.getInstance().logEvent(new Event(number + " removed from " + listName));
                 return true;
             }
         }
@@ -195,7 +197,7 @@ public class DataSet implements Writable {
 
     // MODIFIES: this
     // EFFECTS: calculates and updates dataset standard deviation and mean and calculates the confidence interval
-    //          with given z score
+    //          with given z score and records event in EventLog
     public String calcConfInterval(double z) {
         double lowerBound;
         double upperBound;
@@ -208,6 +210,8 @@ public class DataSet implements Writable {
         calcMean();
         lowerBound = listMean - (z * listSD / sqrt(listLength));
         upperBound = listMean + (z * listSD / sqrt(listLength));
+        EventLog.getInstance().logEvent(new Event(listName + "'s confidence interval calculated"));
+
 
         return "[" + lowerBound + ", " + upperBound + "]";
     }
@@ -236,8 +240,9 @@ public class DataSet implements Writable {
     }
 
     // MODIFIES: this
-    // EFFECTS: sorts the dataset number list from small to large
+    // EFFECTS: sorts the dataset number list from small to large and records event in EventLog
     public void sortList() {
+        EventLog.getInstance().logEvent(new Event(listName + " sorted"));
         Collections.sort(numList);
     }
 

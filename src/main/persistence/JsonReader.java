@@ -3,6 +3,8 @@ package persistence;
 import model.DataBase;
 import model.DataSet;
 
+import model.Event;
+import model.EventLog;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -41,7 +43,7 @@ public class JsonReader {
         return contentBuilder.toString();
     }
 
-    // EFFECTS: parses DataBase from the JSONObject and returns DataBase
+    // EFFECTS: parses DataBase from the JSONObject and returns DataBase and adds to EventLog
     private DataBase parseDataBase(JSONObject jsonObject) {
         String name = jsonObject.getString("name");
         DataBase dataBase = new DataBase(name);
@@ -53,6 +55,7 @@ public class JsonReader {
         dataBase.setListMean(jsonObject.getDouble("listMean"));
         dataBase.setListMedian(jsonObject.getDouble("listMedian"));
         dataBase.setPooledList(makePooledList(jsonObject.getJSONArray("pooledList")));
+        EventLog.getInstance().logEvent(new Event("\"" + name + "\" database loaded from database.json"));
         return dataBase;
     }
 

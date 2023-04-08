@@ -3,10 +3,14 @@ package ui;
 import model.DataSet;
 import model.DataBase;
 
+import model.Event;
+import model.EventLog;
 import persistence.*;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -52,6 +56,7 @@ public class DataAnalysisApp {
             if (order.equals("q")) {
                 saveReminder();
                 System.out.println("Thanks for using!");
+                printEventLog();
                 System.exit(0);
             } else {
                 processOrder(order);
@@ -657,7 +662,13 @@ public class DataAnalysisApp {
 
         frame.setSize(2000, 1500);
         frame.add(panel, BorderLayout.CENTER);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                printEventLog();
+                System.exit(0);
+            }
+        });
         frame.setLocationRelativeTo(null);
         frame.setTitle("Data Analysis App");
         frame.setVisible(true);
@@ -842,9 +853,13 @@ public class DataAnalysisApp {
         JButton no = new JButton("No");
         yes.addActionListener(e -> {
             saveDataBase();
-            System.exit(69);
+            printEventLog();
+            System.exit(0);
         });
-        no.addActionListener(e -> System.exit(420));
+        no.addActionListener(e -> {
+            printEventLog();
+            System.exit(0);
+        });
         savePanel.add(message);
         savePanel.add(yes);
         savePanel.add(no);
@@ -865,6 +880,14 @@ public class DataAnalysisApp {
         panel.add(save);
         panel.add(load);
         panel.add(quit);
+    }
+
+    // EFFECTS: prints out the event log into console
+    private void printEventLog() {
+        System.out.println("Event log: ");
+        for (Event event : EventLog.getInstance()) {
+            System.out.println(event.toString() + ", ");
+        }
     }
 
 
