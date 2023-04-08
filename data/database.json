@@ -1,8 +1,8 @@
 {
-    "listVar": 1659.75,
-    "listMean": -2.5,
-    "listMedian": 7,
-    "pooledListLength": 8,
+    "listVar": 1476.5432098765432,
+    "listMean": -2.111111111111111,
+    "listMedian": 4,
+    "pooledListLength": 9,
     "listOfDatasets": [
         {
             "listVar": 1792.75,
@@ -32,19 +32,23 @@
             "listLength": 3
         },
         {
-            "listVar": 0,
-            "listMean": 12,
-            "listMedian": 12,
-            "listSD": 0,
+            "listVar": 30.25,
+            "listMean": 6.5,
+            "listMedian": 6.5,
+            "listSD": 5.5,
             "listName": "list 3",
-            "numList": [12],
-            "listLength": 1
+            "numList": [
+                1,
+                12
+            ],
+            "listLength": 2
         }
     ],
-    "listSD": 40.740029455070356,
+    "listSD": 38.42581436842352,
     "pooledList": [
         -100,
         -20,
+        1,
         2,
         4,
         10,

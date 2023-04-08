@@ -10,7 +10,7 @@ import java.util.Iterator;
  */
 public class EventLog implements Iterable<Event> {
     private static EventLog theLog;                 // singleton event log to store events of running the program
-    private final Collection<Event> events;               // list of events to store database events
+    private Collection<Event> events;               // list of events to store database events
 
     /**
      * EFFECTS: create a new events list (cannot be called outside of this class)

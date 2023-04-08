@@ -56,43 +56,40 @@ and in the "exit" button (https://pixabay.com/vectors/exit-the-end-emergency-exi
 Example event log
 
 "Event log:
-Fri Apr 07 21:40:38 PDT 2023
+
+Fri Apr 07 22:07:50 PDT 2023
 list 1 added to "Database" database,
-Fri Apr 07 21:40:38 PDT 2023
+Fri Apr 07 22:07:50 PDT 2023
 list 2 added to "Database" database,
-Fri Apr 07 21:40:38 PDT 2023
+Fri Apr 07 22:07:50 PDT 2023
 list 3 added to "Database" database,
-Fri Apr 07 21:40:38 PDT 2023
-"Database" database loaded from database.json,
-Fri Apr 07 21:40:43 PDT 2023
-list 4 added to "Database" database,
-Fri Apr 07 21:40:49 PDT 2023
-list 4 removed from "Database" database,
-Fri Apr 07 21:40:50 PDT 2023
+Fri Apr 07 22:07:54 PDT 2023
+lsit 4 added to "Database" database,
+Fri Apr 07 22:08:08 PDT 2023
+lsit 4 removed from "Database" database,
+Fri Apr 07 22:08:10 PDT 2023
 "Database" database cleared,
-Fri Apr 07 21:40:51 PDT 2023
+Fri Apr 07 22:08:11 PDT 2023
 list 1 added to "Database" database,
-Fri Apr 07 21:40:51 PDT 2023
+Fri Apr 07 22:08:11 PDT 2023
 list 2 added to "Database" database,
-Fri Apr 07 21:40:51 PDT 2023
+Fri Apr 07 22:08:11 PDT 2023
 list 3 added to "Database" database,
-Fri Apr 07 21:40:51 PDT 2023
-"Database" database loaded from database.json,
-Fri Apr 07 21:40:52 PDT 2023
-"Database" database saved to database.json,
-Fri Apr 07 21:40:58 PDT 2023
+Fri Apr 07 22:08:20 PDT 2023
 123.0 added to list 3,
-Fri Apr 07 21:40:58 PDT 2023
+Fri Apr 07 22:08:20 PDT 2023
 123.0 added to Pooled List,
-Fri Apr 07 21:41:00 PDT 2023
+Fri Apr 07 22:08:23 PDT 2023
 123.0 removed from list 3,
-Fri Apr 07 21:41:00 PDT 2023
+Fri Apr 07 22:08:23 PDT 2023
 123.0 removed from Pooled List,
-Fri Apr 07 21:41:01 PDT 2023
+Fri Apr 07 22:08:28 PDT 2023
+1.0 added to list 3,
+Fri Apr 07 22:08:28 PDT 2023
+1.0 added to Pooled List,
+Fri Apr 07 22:08:29 PDT 2023
 list 3 sorted,
-Fri Apr 07 21:41:04 PDT 2023
+Fri Apr 07 22:08:33 PDT 2023
 list 3's confidence interval calculated,
-Fri Apr 07 21:41:09 PDT 2023
-Pooled List sorted,
-Fri Apr 07 21:41:12 PDT 2023
-"Database" database saved to database.json"
+Fri Apr 07 22:08:41 PDT 2023
+Pooled List sorted"

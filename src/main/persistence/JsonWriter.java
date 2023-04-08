@@ -2,8 +2,6 @@ package persistence;
 
 import model.DataBase;
 
-import model.Event;
-import model.EventLog;
 import org.json.JSONObject;
 
 import java.io.FileNotFoundException;
@@ -28,11 +26,10 @@ public class JsonWriter {
     }
 
     // MODIFIES: this
-    // EFFECTS: writes JSON version of the database to file and adds event to EventLog
+    // EFFECTS: writes JSON version of the database to file
     public void write(DataBase dataBase) {
         JSONObject json = dataBase.toJson();
         saveToFile(json.toString(TAB));
-        EventLog.getInstance().logEvent(new Event("\"" + dataBase.getName() + "\" database saved to database.json"));
     }
 
     // MODIFIES: this

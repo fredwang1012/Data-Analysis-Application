@@ -9,8 +9,8 @@ import java.util.Date;
  */
 public class Event {
     private static final int HASH_CONSTANT = 13;    // hashcode hash constant
-    private final Date dateLogged;                        // date of this event
-    private final String description;                     // description of this event
+    private Date dateLogged;                        // date of this event
+    private String description;                     // description of this event
 
     /**
      * EFFECTS: creates an event with the given description and the current date/time stamp
