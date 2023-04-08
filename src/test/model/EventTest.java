@@ -27,9 +27,10 @@ public class EventTest {
     public void testEvent() {
         assertEquals("Sensor open at door", e.getDescription());
         assertEquals(d, e.getDate());
-        assertNotEquals(null, e);
+        assertNotEquals(e, null);
         assertNotEquals("Sensor", e.getDescription());
         assertEquals(e, e);
+        assertNotEquals(e, "Test");
     }
 
     @Test
