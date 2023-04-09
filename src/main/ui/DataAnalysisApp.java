@@ -2,9 +2,9 @@ package ui;
 
 import model.DataSet;
 import model.DataBase;
-
 import model.Event;
 import model.EventLog;
+
 import persistence.*;
 
 import java.awt.*;

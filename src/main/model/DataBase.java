@@ -7,6 +7,7 @@ import persistence.Writable;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
 import static java.lang.Math.sqrt;
 
 // Represents a database with multiple datasets stored in an ArrayList and list length

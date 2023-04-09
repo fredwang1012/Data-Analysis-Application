@@ -93,3 +93,26 @@ Fri Apr 07 22:08:33 PDT 2023
 list 3's confidence interval calculated,
 Fri Apr 07 22:08:41 PDT 2023
 Pooled List sorted"
+
+### Phase 4: Task 3
+
+Having created a UML diagram to properly visualize my project and experience in having to make changes clumsily while 
+coding, a few flaws have come into the picture warranting refactoring. Firstly, I should have separated the GUI and 
+the console UI into two different classes in the UI package. This way, whether a method handles something in the GUI
+functionality or the console UI functionality will be explicitly clear and whatever changes I would like to change in 
+functionality of the application can be changed at a single point of control. This also reduces a lot of duplicated 
+code that is currently present in the UI code. What I could do to still make both GUI and console UI work in tandem(a 
+reason for the shortcut in my current design) is to extract out all the duplicated logic methods that makes the program 
+function and put them in an interface or abstract class and have the two UI classes implement or extend the class to 
+gain access to those methods. There are also some smaller functionality shared between some output methods that could be 
+extracted into helper methods. 
+
+Secondly, in my model directory, specifically regarding my DataBase and DataSet classes, there is a lot of code 
+duplication between the two classes. Other than methods for the manipulation of the list of DataSets in the DataBase,
+the classes have effectively the same methods for the modification of their respective lists of numbers. To reduce the 
+code duplication and instate a single point of control for the shared methods, I should extract an abstract class with 
+composed of those methods that are extended by the DataBase and DataSet classes.
+
+After implementing the refactoring suggested above, the code for the program will be greatly more accessible and easier
+to edit for any purpose from adding functionality to improving the UI and, in the long run, become much more 
+maintainable. 
